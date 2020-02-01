@@ -4,6 +4,4 @@ APP_PLATFORM := android-21
 APP_CFLAGS := -O2 -std=c11 -Wall
 APP_CPPFLAGS += -frtti
 
-APP_STL := gnustl_shared
-
-NDK_TOOLCHAIN_VERSION=4.9
+APP_STL := c++_shared
