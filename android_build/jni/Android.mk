@@ -1,6 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)  
-LOCAL_LDLIBS := -llog -lGLESv1_CM
+LOCAL_LDLIBS := -llog
 LOCAL_MODULE    := lwjgl32
 
 theirsrc := $(subst $(LOCAL_PATH)/,,\
@@ -22,13 +22,13 @@ LOCAL_LDLIBS := $(LOCAL_PATH)/$(TARGET_ARCH_ABI)/libdyncall_s.a \
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -lGLESv1_CM
+LOCAL_LDLIBS := -llog -lEGL
 LOCAL_MODULE    := lwjgl_opengl32
 
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
 	) \
-	opengl_JniOnLoadShim.c
+	opengl_JniOnLoadShim.c egl_swapBuffers.c
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 	$(LOCAL_PATH)/lwjgl/core/src/main/c/dyncall $(LOCAL_PATH)/lwjgl/core/src/main/c/linux \
@@ -39,7 +39,7 @@ LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -lGLESv1_CM
+LOCAL_LDLIBS := -llog
 LOCAL_MODULE    := lwjgl_stb32
 
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
