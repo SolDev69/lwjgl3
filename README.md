@@ -1,3 +1,15 @@
+LWJGL3 modified for Boardwalk.
+
+This contains the native patches _only_: Java patches to LWJGL are in the main
+Boardwalk repository in
+[lwjgl3override](https://github.com/zhuowei/Boardwalk/tree/boardwalk-2.0/lwjgl3override).
+
+This repository is only used to build the modified native libraries.
+
+![Build lwjgl3](https://github.com/BoardwalkApp/boardwalk2-lwjgl3/workflows/Build%20lwjgl3/badge.svg)
+
+---
+
 [![Maven Central](https://img.shields.io/maven-central/v/org.lwjgl/lwjgl.svg?label=maven%20central)](https://search.maven.org/search?q=g:org.lwjgl)
 [![API Javadoc](https://img.shields.io/badge/API-docs-blue.svg)](https://javadoc.lwjgl.org/)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg?colorB=lightgray)](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md)
