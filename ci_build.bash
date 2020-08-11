@@ -11,10 +11,12 @@ wget -nv -O dyncall-1.0.tar.gz "https://www.dyncall.org/r1.0/dyncall-1.0.tar.gz"
 tar xf dyncall-1.0.tar.gz
 ./build_dyncall.bash
 (cd dyncall-1.0/android_arm_build/ && make)
+(cd dyncall-1.0/android_x86_build/ && make)
 cp dyncall-1.0/android_arm_build/dyncall/libdyncall_s.a \
 	dyncall-1.0/android_arm_build/dyncallback/libdyncallback_s.a \
 	dyncall-1.0/android_arm_build/dynload/libdynload_s.a \
 	jni/armeabi-v7a/
+	
 cp dyncall-1.0/android_x86_build/dyncall/libdyncall_s.a \
 	dyncall-1.0/android_x86_build/dyncallback/libdyncallback_s.a \
 	dyncall-1.0/android_x86_build/dynload/libdynload_s.a \
