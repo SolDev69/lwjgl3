@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)  
 LOCAL_LDLIBS := -llog
-LOCAL_MODULE    := lwjgl32
+LOCAL_MODULE    := lwjgl
 
 theirsrc := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/core/src/generated/c/*.c) \
@@ -23,7 +23,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_LDLIBS := -llog -lEGL
-LOCAL_MODULE    := lwjgl_opengl32
+LOCAL_MODULE    := lwjgl_opengl
 
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
@@ -40,7 +40,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_LDLIBS := -llog
-LOCAL_MODULE    := lwjgl_stb32
+LOCAL_MODULE    := lwjgl_stb
 
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/stb/src/generated/c/*.c) \
