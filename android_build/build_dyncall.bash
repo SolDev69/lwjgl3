@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 cd dyncall-1.0
-rm -r android_build || true
+rm -rf android_build
 mkdir android_build
 cd android_build
 cmake .. \
