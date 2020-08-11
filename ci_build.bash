@@ -23,3 +23,7 @@ cp dyncall-1.0/android_x86_build/dyncall/libdyncall_s.a \
 	jni/x86/
 # Build LWJGL Android native libraries
 "$ANDROID_NDK_HOME/ndk-build"
+
+# Copy debug libs
+cp -r obj/local libs_debug
+rm -r libs_debug/*/objs*
