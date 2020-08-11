@@ -1,4 +1,6 @@
-LWJGL3 modified for Boardwalk.
+LWJGL3 modified for Boardwalk and PojavLauncher.
+
+This fork enable support build for x86.
 
 This contains the native patches _only_: Java patches to LWJGL are in the main
 Boardwalk repository in
@@ -6,7 +8,7 @@ Boardwalk repository in
 
 This repository is only used to build the modified native libraries.
 
-![Build lwjgl3](https://github.com/BoardwalkApp/boardwalk2-lwjgl3/workflows/Build%20lwjgl3/badge.svg)
+![Build lwjgl3](https://github.com/PojavLauncherTeam/lwjgl3/workflows/Build%20lwjgl3/badge.svg)
 
 ---
 
