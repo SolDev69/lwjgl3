@@ -22,3 +22,9 @@ jobs:
       with:
         name: lwjgl3-android-natives
         path: android_build/libs
+
+    - name: Upload debug build output
+      uses: actions/upload-artifact@v1
+      with:
+        name: lwjgl3-debug-android-natives
+        path: android_build/libs
