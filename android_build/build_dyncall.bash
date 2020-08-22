@@ -1,24 +1,32 @@
 #!/bin/bash
 set -e
+
+func_build_and_cp () {
+	currbuild="android_$1_build"
+	
+	rm -rf $currbuild
+	mkdir $currbuild
+	cd $currbuild
+	
+	cmake .. \
+		-DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
+		-DANDROID_ABI=$1 \
+		-DANDROID_NATIVE_API_LEVEL=21 \
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_C_FLAGS="-no-integrated-as"
+	
+	make
+	
+	cp dyncall/libdyncall_s.a \
+		dyncallback/libdyncallback_s.a \
+		dynload/libdynload_s.a \
+		../../jni/$1/
+}
+
 cd dyncall-1.0
-rm -rf android_arm_build
-mkdir android_arm_build
-cd android_arm_build
-cmake .. \
-	-DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
-	-DANDROID_ABI=armeabi-v7a \
-	-DANDROID_NATIVE_API_LEVEL=21 \
-	-DBUILD_SHARED_LIBS=ON \
-	-DCMAKE_C_FLAGS="-no-integrated-as"
 
-cd ..
+func_build_and_cp arm64-v8a
+func_build_and_cp armeabi-v7a
+func_build_and_cp x86_64
+func_build_and_cp x86
 
-rm -rf android_x86_build
-mkdir android_x86_build
-cd android_x86_build
-cmake .. \
-	-DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
-	-DANDROID_ABI=x86 \
-	-DANDROID_NATIVE_API_LEVEL=21 \
-	-DBUILD_SHARED_LIBS=ON \
-	-DCMAKE_C_FLAGS="-no-integrated-as"
