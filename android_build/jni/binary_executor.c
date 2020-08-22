@@ -19,13 +19,13 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
 	
-	char *exec_file_c = (char*) env->GetStringUTFChars(env->GetObjectArrayElement(cmdArgs, 0), 0);
+	char *exec_file_c = (char*) (*env)->GetStringUTFChars((*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	(*env)->ReleaseUTFChars(env, exec_file_c);
 	
 	char *exec_error_c = dlerror();
 	if (exec_error_c == NULL) {
-		env->ThrowNew(exception_cls, ("dlopen error: ", exec_error_c));
+		(*env)->ThrowNew(env, exception_cls, ("dlopen error: ", exec_error_c));
 		return -1;
 	}
 	
