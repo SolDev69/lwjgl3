@@ -25,7 +25,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	
 	char *exec_error_c = dlerror();
 	if (exec_error_c == NULL) {
-		(*env)->ThrowNew(env, exception_cls, ("dlopen error: ", exec_error_c));
+		(*env)->ThrowNew(env, exception_cls, "dlopen error: " exec_error_c);
 		return -1;
 	}
 	
@@ -34,7 +34,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	
 	exec_error_c = dlerror();
 	if (exec_error_c == NULL) {
-		(*env)->ThrowNew(env, exception_cls, ("dlsym error: ", exec_error_c));
+		(*env)->ThrowNew(env, exception_cls, "dlsym error: " exec_error_c);
 		return -1;
 	}
 	
