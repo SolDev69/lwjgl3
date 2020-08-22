@@ -30,7 +30,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	char *exec_error_c = dlerror();
 	if (exec_error_c != NULL) {
 		LOGE("dlopen error: %s", exec_error_c);
-		(*env)->ThrowNew(env, exception_cls, "dlopen error! Check logcat for details");
+		(*env)->ThrowNew(env, exception_cls, exec_error_c);
 		return -1;
 	}
 	
@@ -40,7 +40,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	exec_error_c = dlerror();
 	if (exec_error_c != NULL) {
 		LOGE("dlsym error: %s", exec_error_c);
-		(*env)->ThrowNew(env, exception_cls, "dlsym error! Check logcat for details");
+		(*env)->ThrowNew(env, exception_cls, exec_error_c);
 		return -1;
 	}
 	
