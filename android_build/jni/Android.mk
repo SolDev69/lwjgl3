@@ -53,3 +53,13 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 
 include $(BUILD_SHARED_LIBRARY)
+
+# PojavLauncher lib to load OpenJDK bin/java executable
+include $(CLEAR_VARS)
+LOCAL_LDLIBS := -ldl
+LOCAL_MODULE := binexecutor
+
+LOCAL_SRC_FILES := binary_executor.c
+
+include $(BUILD_SHARED_LIBRARY)
+
