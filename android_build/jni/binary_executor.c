@@ -25,7 +25,7 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setEnvironment(JNIEnv *env, jclass clazz, jstring envStr) {
 	char *env_c = (char*) (*env)->GetStringUTFChars(env, envStr, 0);
 	putenv(env_c);
-	(*env)->ReleaseStringUTFChars(env, env_c);
+	(*env)->ReleaseStringUTFChars(env, envStr, env_c);
 }
 
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
