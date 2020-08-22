@@ -5,7 +5,7 @@ typedef int (*Main_Function_t)(int, char**);
 
 char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
-	char **cArray = (char **) malloc(n_rows * sizeof(char*));
+	char **cArray = (char **) malloc(num_rows * sizeof(char*));
 	jstring row;
 	
 	for (int i = 0; i < num_rows; i++) {
@@ -19,7 +19,7 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
 	
-	char *exec_file_c = (char*) (*env)->GetStringUTFChars((*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
+	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	// (*env)->ReleaseUTFChars(env, exec_file_c);
 	
