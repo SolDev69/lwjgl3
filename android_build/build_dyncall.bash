@@ -11,30 +11,30 @@ rm -rf android_arm64_build
 mkdir android_arm64_build
 cd android_arm64_build
 cmake .. \
-	$DEFAULT_CMAKE_JEMALLOC_ARGS \
-	-DANDROID_ABI=arm64-v8a
+	-DANDROID_ABI=arm64-v8a \
+	$DEFAULT_CMAKE_JEMALLOC_ARGS
 
 cd ..
 rm -rf android_arm_build
 mkdir android_arm_build
 cd android_arm_build
 cmake .. \
-	$DEFAULT_CMAKE_JEMALLOC_ARGS \
-	-DANDROID_ABI=armeabi-v7a
+	-DANDROID_ABI=armeabi-v7a \
+	$DEFAULT_CMAKE_JEMALLOC_ARGS
 
 cd ..
 rm -rf android_x86_64_build
 mkdir android_x86_64_build
 cd android_x86_64_build
 cmake .. \
-	$DEFAULT_CMAKE_JEMALLOC_ARGS \
-	-DANDROID_ABI=x86_64
+	-DANDROID_ABI=x86_64 \
+	$DEFAULT_CMAKE_JEMALLOC_ARGS
 	
 cd ..
 rm -rf android_x86_build
 mkdir android_x86_build
 cd android_x86_build
 cmake .. \
-	$DEFAULT_CMAKE_JEMALLOC_ARGS \
-	-DANDROID_ABI=x86
+	-DANDROID_ABI=x86 \
+	$DEFAULT_CMAKE_JEMALLOC_ARGS
 
