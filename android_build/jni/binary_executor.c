@@ -4,24 +4,24 @@
 typedef int (*Main_Function_t)(int, char**);
 
 char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
-	int num_rows = env->GetArrayLength(jstringArray);
+	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	char **cArray = (char **) malloc(n_rows * sizeof(char*));
 	jstring row;
 	
 	for (int i = 0; i < num_rows; i++) {
-		row = (jstring) env->GetObjectArrayElement(jstringArray, i);
-		cArray[i] = (char*)env->GetStringUTFChars(row, 0);
+		row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
+		cArray[i] = (char*)(*env)->GetStringUTFChars(env, row, 0);
     }
 		
     return cArray;
 }
 
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
-	jclass exception_cls = env->FindClass("java/lang/IllegalArgumentException");
+	jclass exception_cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
 	
 	char *exec_file_c = (char*) env->GetStringUTFChars(env->GetObjectArrayElement(cmdArgs, 0), 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
-	env->ReleaseUTFChars(exec_file_c);
+	(*env)->ReleaseUTFChars(env, exec_file_c);
 	
 	char *exec_error_c = dlerror();
 	if (exec_error_c == NULL) {
@@ -34,10 +34,10 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jcla
 	
 	exec_error_c = dlerror();
 	if (exec_error_c == NULL) {
-		env->ThrowNew(exception_cls, ("dlsym error: ", exec_error_c));
+		(*env)->ThrowNew(env, exception_cls, ("dlsym error: ", exec_error_c));
 		return -1;
 	}
 	
-	int cmd_argv = env->GetArrayLength(cmdArgs);
+	int cmd_argv = (*env)->GetArrayLength(env, cmdArgs);
 	return Main_Function(cmd_argv, convert_to_char(env, cmdArgs));
 }
