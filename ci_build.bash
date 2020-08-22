@@ -42,7 +42,7 @@ cp dyncall-1.0/android_x86_build/dyncall/libdyncall_s.a \
 	dyncall-1.0/android_x86_build/dyncallback/libdyncallback_s.a \
 	dyncall-1.0/android_x86_build/dynload/libdynload_s.a \
 	jni/x86/
-	
+
 # Build LWJGL Android native libraries
 "$ANDROID_NDK_HOME/ndk-build"
 
