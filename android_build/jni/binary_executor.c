@@ -1,5 +1,7 @@
 #include <jni.h>
 #include <dlfcn.h>
+#include <stdlib.h>
+
 #include <android/log.h>
 
 #define TAG "BinaryExecutor"
@@ -29,9 +31,11 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setEnvironment(JN
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
-	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
+	jstring execFile = (*env)->GetObjectArrayElement(env, cmdArgs, 0);
+	
+	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
-	(*env)->ReleaseStringUTFChars(env, exec_file_c);
+	(*env)->ReleaseStringUTFChars(env, execFile, exec_file_c);
 	
 	char *exec_error_c = dlerror();
 	if (exec_error_c != NULL) {
