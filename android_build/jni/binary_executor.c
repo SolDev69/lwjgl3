@@ -2,8 +2,6 @@
 #include <dlfcn.h>
 #include <android/log.h>
 
-#include "logger.h"
-
 #define TAG "BinaryExecutor"
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,    TAG, __VA_ARGS__)
 
