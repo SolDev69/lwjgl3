@@ -16,7 +16,7 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
