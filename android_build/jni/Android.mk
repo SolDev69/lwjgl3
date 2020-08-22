@@ -56,7 +56,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 # PojavLauncher lib to load OpenJDK bin/java executable
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -ldl
+LOCAL_LDLIBS := -ldl -llog
 LOCAL_MODULE := binexecutor
 
 LOCAL_SRC_FILES := binary_executor.c
