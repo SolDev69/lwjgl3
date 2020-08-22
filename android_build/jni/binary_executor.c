@@ -16,7 +16,7 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jclass clazz, jstring execFile, jobjectArray cmdArgs) {
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jclass clazz, jstring execFile, jobjectArray cmdArgs) {
 	jclass exception_cls = env->FindClass("java/lang/IllegalArgumentException");
 	
 	char *exec_file_c = (char*)env->GetStringUTFChars(execFile, 0);
@@ -24,19 +24,20 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jcla
 	env->ReleaseUTFChars(exec_file_c);
 	
 	char *exec_error_c = dlerror();
-	if (exec_error == NULL) {
+	if (exec_error_c == NULL) {
 		env->ThrowNew(exception_cls, ("dlopen error: ", exec_error_c));
-		return;
+		return -1;
 	}
 	
 	Main_Function_t Main_Function;
 	Main_Function = (Main_Function_t) dlsym(exec_binary_handle, "main");
 	
 	exec_error_c = dlerror();
-	if (exec_error == NULL) {
-		env->ThrowNew(exception_cls, ("dlopen error: ", exec_error_c));
-		return;
+	if (exec_error_c == NULL) {
+		env->ThrowNew(exception_cls, ("dlsym error: ", exec_error_c));
+		return -1;
 	}
 	
-	Main_Function(env->GetArrayLength(cmdArgs), convert_to_char(env, cmdArgs));
+	char *cmd_path_c = env->GetArrayLength(cmdArgs);
+	return Main_Function(cmd_path_c, convert_to_char(env, cmdArgs));
 }
