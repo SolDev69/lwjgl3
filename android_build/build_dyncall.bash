@@ -2,11 +2,9 @@
 set -e
 
 func_build_and_cp () {
-	currbuild="android_$1_build"
-	
-	rm -rf $currbuild
-	mkdir $currbuild
-	cd $currbuild
+	rm -rf android_$1_build
+	mkdir android_$1_build
+	cd android_$1_build
 	
 	cmake .. \
 		-DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
