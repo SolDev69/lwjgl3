@@ -21,7 +21,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor(JNIEnv *env, jcla
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars((*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
-	(*env)->ReleaseUTFChars(env, exec_file_c);
+	// (*env)->ReleaseUTFChars(env, exec_file_c);
 	
 	char *exec_error_c = dlerror();
 	if (exec_error_c == NULL) {
