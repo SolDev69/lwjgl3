@@ -20,14 +20,14 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setEnvironment(JNIEnv *env, jclass clazz, jstring env) {
+JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setEnvironment(JNIEnv *env, jclass clazz, jstring envStr) {
 	char *env_c = (char*) (*env)->GetStringUTFChars(env, envStr, 0);
 	putenv(env_c);
 	(*env)->ReleaseStringUTFChars(env, env_c);
 }
 
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
-	jclass exception_cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, cmdArgs, 0), 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
@@ -35,7 +35,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	
 	char *exec_error_c = dlerror();
 	if (exec_error_c != NULL) {
-		LOGE(exec_error_c);
+		LOGE("Error: %s", exec_error_c);
 		(*env)->ThrowNew(env, exception_cls, exec_error_c);
 		return -1;
 	}
@@ -45,7 +45,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	
 	exec_error_c = dlerror();
 	if (exec_error_c != NULL) {
-		LOGE(exec_error_c);
+		LOGE("Error: %s", exec_error_c);
 		(*env)->ThrowNew(env, exception_cls, exec_error_c);
 		return -1;
 	}
