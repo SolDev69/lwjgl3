@@ -27,8 +27,9 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
 	char *ld_library_path_c = (char*) (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
-	
-	void *exec_binary_handle = dlopen_ext(ld_library_path_c, exec_file_c, RTLD_LAZY);
+	putenv("LD_LIBRARY_PATH=%s", ld_library_path_c);
+		
+	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	
 	(*env)->ReleaseStringUTFChars(env, ldLibraryPath, ld_library_path_c);
 	(*env)->ReleaseStringUTFChars(env, execFile, exec_file_c);
