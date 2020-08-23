@@ -58,7 +58,7 @@ static struct android_namespace_t* create_namespace(const char* name,
 			return NULL;
 		}
 	}
-	LOGV("Creating namespace");
+	LOGD("Creating namespace");
 	return _create_namespace(name, ld_library_path, default_library_path, type, permitted_when_isolated_path, parent_namespace);
 }
 
@@ -72,14 +72,14 @@ void* dlopen_ext(const char* ld_library_path, const char* filename, int flags) {
 		libdl_handle = dlopen ("libdl.so", RTLD_NOW);
 		if (!libdl_handle) {
 			LOGE ("Error dlopening libdl.so: %s", dlerror());
-            LOGV("Dlopening using default dlopen");
+            LOGD("Dlopening using default dlopen");
             return dlopen (filename, flags);
 		}
 		_dlopen_ext = (void* (*)(const char*, int, const android_dlextinfo*)) dlsym(libdl_handle, "android_dlopen_ext");
 		if (!_dlopen_ext)  {
 		    error = dlerror();
 		    LOGE ("Error opening dlopen_ext in libdl.so ( %s )", (error)?error:"");
-            LOGV("Dlopening using default dlopen");
+            LOGD("Dlopening using default dlopen");
             return dlopen (filename, flags);
 		}
 	}
@@ -95,11 +95,11 @@ void* dlopen_ext(const char* ld_library_path, const char* filename, int flags) {
 		android_dlextinfo ext = {0};
 		ext.flags = ANDROID_DLEXT_USE_NAMESPACE;
 		ext.library_namespace = ns;
-        LOGV("Dlopening using default dlopen_ext");
+        LOGD("Dlopening using default dlopen_ext");
 		return _dlopen_ext (filename, flags, &ext);
 	}
 
-    LOGV("Dlopening using default dlopen");
+    LOGD("Dlopening using default dlopen");
 	return dlopen (filename, flags);
 }
 
