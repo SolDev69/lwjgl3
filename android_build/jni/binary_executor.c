@@ -20,19 +20,36 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jstring ldLibraryPath, jobjectArray cmdArgs) {
+JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring name) {
+	const char* nameUtf = (*env)->GetStringUTFChars(env, name, NULL);
+	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
+	if (!handle) {
+		LOGE("Failed to dlopen %s: %s", nameUtf, dlerror());
+	}
+	(*env)->ReleaseStringUTFChars(env, name, nameUtf);
+	return handle != NULL;
+}
+
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_chdir(JNIEnv *env, jclass clazz, jstring nameStr) {
+	const char* name = (*env)->GetStringUTFChars(env, nameStr, NULL);
+	int retval = chdir(name);
+	(*env)->ReleaseStringUTFChars(env, nameStr, name);
+	return retval;
+}
+
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, /* jstring ldLibraryPath, */ jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
 	jstring execFile = (*env)->GetObjectArrayElement(env, cmdArgs, 0);
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
 	char *ld_library_path_c = (char*) (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
-	
+/*
 	char ld_libpath_env[512];
 	strcpy(ld_libpath_env, "LD_LIBRARY_PATH=");
 	strcat(ld_libpath_env, ld_library_path_c);
 	putenv(ld_libpath_env);
-		
+*/	
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	
 	(*env)->ReleaseStringUTFChars(env, ldLibraryPath, ld_library_path_c);
