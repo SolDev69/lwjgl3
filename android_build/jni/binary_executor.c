@@ -2,10 +2,8 @@
 #include <dlfcn.h>
 #include <stdlib.h>
 
-#include <android/log.h>
-
-#define TAG "BinaryExecutor"
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,    TAG, __VA_ARGS__)
+#include "log.h"
+#include "binary_custom_dlopen.h"
 
 typedef int (*Main_Function_t)(int, char**);
 
@@ -22,19 +20,17 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setEnvironment(JNIEnv *env, jclass clazz, jstring envStr) {
-	char *env_c = (char*) (*env)->GetStringUTFChars(env, envStr, 0);
-	putenv(env_c);
-	(*env)->ReleaseStringUTFChars(env, envStr, env_c);
-}
-
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jstring ldLibraryPath, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
 	jstring execFile = (*env)->GetObjectArrayElement(env, cmdArgs, 0);
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
-	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
+	char *ld_library_path_c = (char*) (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
+	
+	void *exec_binary_handle = dlopen_ext(ld_library_path_c, exec_file_c, RTLD_LAZY);
+	
+	(*env)->ReleaseStringUTFChars(env, ldLibraryPath, ld_library_path_c);
 	(*env)->ReleaseStringUTFChars(env, execFile, exec_file_c);
 	
 	char *exec_error_c = dlerror();
