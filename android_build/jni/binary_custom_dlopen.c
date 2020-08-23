@@ -2,7 +2,7 @@
 // Modified version
 
 #include <dlfcn.h>
-#include <cstring>
+// #include <cstring>
 #include <android/dlext.h>
 
 #include "binary_custom_dlopen.h"
