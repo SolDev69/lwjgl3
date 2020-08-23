@@ -59,7 +59,8 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog
 LOCAL_MODULE := binexecutor
 
-LOCAL_SRC_FILES := binary_executor.c binary_custom_dlopen.c
+LOCAL_SRC_FILES := binary_executor.c
+# binary_custom_dlopen.c
 
 include $(BUILD_SHARED_LIBRARY)
 
