@@ -156,12 +156,16 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM
 
    res = launchJVM(argc, argv);
 
+   __android_log_print(3, "LaunchJVM", "Freeing args");
+   
    //free args
    for (i = 0; i < argc; i++) {
        free(argv[i]);
    }
    free(argv);
-
+   
+   __android_log_print(3,"LaunchJVM", "Free done");
+   
    return res;
 }
 
