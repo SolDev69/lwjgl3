@@ -2,10 +2,10 @@
 
 #include <jni.h>
 #include <dlfcn.h>
-#include <EGL/egl.h>
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-	// TODO change to orig code???
-	eglMakeCurrent(eglGetCurrentDisplay(), eglGetCurrentSurface(EGL_DRAW), eglGetCurrentSurface(EGL_READ), eglGetCurrentContext());
+	void* boardwalkJni = dlopen(NULL /* "libboardwalk2_jni.so" */, RTLD_GLOBAL | RTLD_LAZY);
+	void (*boardwalk2_openGLOnLoad)() = dlsym(boardwalkJni, "boardwalk2_openGLOnLoad");
+	boardwalk2_openGLOnLoad();
 	return JNI_VERSION_1_2;
 }
