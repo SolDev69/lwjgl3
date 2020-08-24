@@ -101,10 +101,12 @@ static jint launchJVM(int argc, char** argv) {
        return 0;
    }
 
-        __android_log_print(3,"JVM", "Calling JLI_Launch");
-   return pJLI_Launch(argc, argv, 0, NULL, 0, NULL, FULL_VERSION,
-                          DOT_VERSION, *argv, *argv, JNI_FALSE, JNI_FALSE,
-                          JNI_FALSE, 0);
+   __android_log_print(3,"JVM", "Calling JLI_Launch");
+   return pJLI_Launch(argc, argv, 
+       0, NULL, 0, NULL,
+       FULL_VERSION,
+	   DOT_VERSION, "java", "openjdk", JNI_FALSE,
+	   JNI_TRUE, JNI_FALSE, 0);
 }
 
 /*
@@ -156,12 +158,16 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM
 
    res = launchJVM(argc, argv);
 
+   __android_log_print(3, "LaunchJVM", "Freeing args");
+   
    //free args
    for (i = 0; i < argc; i++) {
        free(argv[i]);
    }
    free(argv);
-
+   
+   __android_log_print(3,"LaunchJVM", "Free done");
+   
    return res;
 }
 
