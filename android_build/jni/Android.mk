@@ -28,8 +28,8 @@ LOCAL_MODULE    := lwjgl_opengl
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
 	) \
-	opengl_JniOnLoadShim.c egl_swapBuffers.c
-
+	opengl_JniOnLoadShim.c
+	
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 	$(LOCAL_PATH)/lwjgl/core/src/main/c/dyncall $(LOCAL_PATH)/lwjgl/core/src/main/c/linux \
 	$(LOCAL_PATH)/lwjgl/opengl/src/main/c
@@ -59,7 +59,7 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog
 LOCAL_MODULE := binexecutor
 
-LOCAL_SRC_FILES := binary_executor.c binary_VMLauncher.c
+LOCAL_SRC_FILES := binary_executor.c binary_VMLauncher.c egl_swapBuffers.c
 # binary_custom_dlopen.c
 
 include $(BUILD_SHARED_LIBRARY)
