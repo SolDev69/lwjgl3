@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "log.h"
-// #include "binary_custom_dlopen.h"
+#include "binary_custom_dlopen.h"
 
 typedef int (*Main_Function_t)(int, char**);
 
@@ -20,9 +20,10 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring name) {
-	const char* nameUtf = (*env)->GetStringUTFChars(env, name, NULL);
-	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
+JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring ldLibraryPath, jstring name) {
+	const char* nameUtf = (*env)->GetStringUTFChars(env, name, 0);
+	const char* ldLibPathUtf = (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
+	void* handle = dlopen_ext(ldLibPathUtf, nameUtf, RTLD_GLOBAL | RTLD_LAZY);
 	if (!handle) {
 		LOGE("Failed to dlopen %s: %s", nameUtf, dlerror());
 	}
@@ -43,14 +44,7 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	jstring execFile = (*env)->GetObjectArrayElement(env, cmdArgs, 0);
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
-	
-/*
-	char *ld_library_path_c = (char*) (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
-	char ld_libpath_env[512];
-	strcpy(ld_libpath_env, "LD_LIBRARY_PATH=");
-	strcat(ld_libpath_env, ld_library_path_c);
-	putenv(ld_libpath_env);
-*/	
+
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	
 	// (*env)->ReleaseStringUTFChars(env, ldLibraryPath, ld_library_path_c);
