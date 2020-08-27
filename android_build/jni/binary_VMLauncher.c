@@ -29,6 +29,9 @@
 #include <dlfcn.h>
 // Boardwalk: missing include
 #include <string.h>
+
+#include "log.h"
+
 // Boardwalk: not used
 // #include "DalvikProxySelector.h"
 // #include "com_oracle_dalvik_VMLauncher.h"
@@ -87,7 +90,7 @@ static jint launchJVM(int argc, char** argv) {
 	// Boardwalk: silence
         // LOGD("JLI lib = %x", (int)libjli);
    if (NULL == libjli) {
-	   LOGE("JLI lib = NULL: %s"  dlerror());
+	   LOGE("JLI lib = NULL: %s", dlerror());
        return 0;
    }
    LOGD("Found JLI lib");
