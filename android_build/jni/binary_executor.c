@@ -39,12 +39,12 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(
 	android_update_LD_LIBRARY_PATH = (android_update_LD_LIBRARY_PATH_t) updateLdLibPath;
 	const char* ldLibPathUtf = (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
 	android_update_LD_LIBRARY_PATH(ldLibPathUtf);
-	(*env)->ReleaseStringUTFChars(env, ldLibPath, ldLibPathUtf);
+	(*env)->ReleaseStringUTFChars(env, ldLibraryPath, ldLibPathUtf);
 }
 
 JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring name) {
 	const char* nameUtf = (*env)->GetStringUTFChars(env, name, 0);
-	void* handle = dlopen(ldLibPathUtf, nameUtf, RTLD_GLOBAL | RTLD_LAZY);
+	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
 	if (!handle) {
 		LOGE("Failed to dlopen %s: %s", nameUtf, dlerror());
 	}
