@@ -35,7 +35,7 @@
 
 // PojavLancher: fixme: are these wrong?
 #define FULL_VERSION "1.11.0_01-internal"
-#define DOT_VERSION "1.11.0_01"
+#define DOT_VERSION "1.11"
 
 typedef jint JNI_CreateJavaVM_func(JavaVM **pvm, void **penv, void *args);
 
@@ -59,14 +59,14 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
     //Save dalvik global JavaVM pointer
     dalvikJavaVMPtr = vm;
-    __android_log_print(3,"JVM", "JNI_OnLoad calling GetEnv()");
+    LOGD("JNI_OnLoad calling GetEnv()");
     JNIEnv* env = NULL;
     (*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_4);
 /* Boardwalk: not used
-    __android_log_print(3,"JVM", "JNI_OnLoad calling initDalvikProxySelectorData()");
+    LOGD("JNI_OnLoad calling initDalvikProxySelectorData()");
     initDalvikProxySelectorData(env);
 */
-    __android_log_print(3,"JVM", "JNI_OnLoad returning()");
+    LOGD("JNI_OnLoad returning()");
     return JNI_VERSION_1_4;
 }
 
@@ -75,7 +75,7 @@ static void logArgs(int argc, char** argv) {
     int i;
     
     for (i = 0; i < argc; i++) {
-        __android_log_print(3,"JVM", "arg[%d]: %s", i, argv[i]);
+        LOGD("arg[%d]: %s", i, argv[i]);
     }
 */
 }
@@ -85,28 +85,30 @@ static jint launchJVM(int argc, char** argv) {
 
    void* libjli = dlopen("libjli.so", RTLD_LAZY | RTLD_GLOBAL);
 	// Boardwalk: silence
-        // __android_log_print(3,"JVM", "JLI lib = %x", (int)libjli);
+        // LOGD("JLI lib = %x", (int)libjli);
    if (NULL == libjli) {
+	   LOGE("JLI lib = NULL: %s"  dlerror());
        return 0;
    }
-        __android_log_print(3,"JVM", "Found JLI lib");
+   LOGD("Found JLI lib");
 
    JLI_Launch_func *pJLI_Launch =
           (JLI_Launch_func *)dlsym(libjli, "JLI_Launch");
 	// Boardwalk: silence
-        // __android_log_print(3,"JVM", "JLI_Launch = 0x%x", *(int*)&pJLI_Launch);
+    // LOGD("JLI_Launch = 0x%x", *(int*)&pJLI_Launch);
 
    if (NULL == pJLI_Launch) {
-        __android_log_print(3,"JVM", "JLI_Launch = NULL");
+       LOGE("JLI_Launch = NULL");
        return 0;
    }
 
-   __android_log_print(3,"JVM", "Calling JLI_Launch");
+   LOGD("Calling JLI_Launch");
+
    return pJLI_Launch(argc, argv, 
        0, NULL, 0, NULL,
        FULL_VERSION,
 	   DOT_VERSION, "java", "openjdk", JNI_FALSE,
-	   JNI_FALSE, JNI_FALSE, 0);
+	   JNI_TRUE, JNI_FALSE, 0);
 }
 
 /*
@@ -120,55 +122,54 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM
    char **argv = NULL;
    int i;
 
-        // Save dalvik JNIEnv pointer for JVM launch thread
-        dalvikJNIEnvPtr = env;
+    // Save dalvik JNIEnv pointer for JVM launch thread
+    dalvikJNIEnvPtr = env;
 
-        if (argsArray == NULL) {
-          __android_log_print(3,"LaunchJVM", " args array null, returning ");
-       //handle error
-       return 0;
-   }
+    if (argsArray == NULL) {
+        LOGE("Args array null, returning");
+        //handle error
+        return 0;
+    }
 
-   int argc = (*env)->GetArrayLength(env, argsArray);
+    int argc = (*env)->GetArrayLength(env, argsArray);
 
-   argv = calloc( (argc+1), sizeof(jbyte*) );
+    argv = calloc( (argc+1), sizeof(jbyte*) );
 
-   //copy args
-   for (i = 0; i < argc; i++) {
-       jstring stringElement = (jstring) (*env)->GetObjectArrayElement(env, argsArray, i);
-       // Boardwalk: this is a const char
-       const char *ansiString = (*env)->GetStringUTFChars(env, stringElement, NULL);
-       if (ansiString == NULL) {
-           //handle error
-           return 0;
-       }
-       // Boardwalk: also a char
-       argv[i] = calloc( (strlen(ansiString)+1), sizeof(char) );
-       if (argv[i] == NULL) {
-           //handle error
-           return 0;
-       }
-       strcpy(argv[i], ansiString);
-       // Boardwalk: remove redundant cast
-       (*env)->ReleaseStringUTFChars(env, stringElement, ansiString);
-   }
-   //add NULL element
-   argv[argc] = NULL;
-        __android_log_print(3,"LaunchJVM", " Done processing args ");
+    //copy args
+    for (i = 0; i < argc; i++) {
+        jstring stringElement = (jstring) (*env)->GetObjectArrayElement(env, argsArray, i);
+        // Boardwalk: this is a const char
+        const char *ansiString = (*env)->GetStringUTFChars(env, stringElement, NULL);
+        if (ansiString == NULL) {
+            //handle error
+            return 0;
+        }
+        // Boardwalk: also a char
+        argv[i] = calloc( (strlen(ansiString)+1), sizeof(char) );
+        if (argv[i] == NULL) {
+            //handle error
+            return 0;
+        }
+        strcpy(argv[i], ansiString);
+        // Boardwalk: remove redundant cast
+        (*env)->ReleaseStringUTFChars(env, stringElement, ansiString);
+    }
+    //add NULL element
+    argv[argc] = NULL;
+    LOGD("Done processing args ");
 
-   res = launchJVM(argc, argv);
+    res = launchJVM(argc, argv);
 
-   __android_log_print(3, "LaunchJVM", "Freeing args");
+    LOGD("Freeing args");
+    //free args
+    for (i = 0; i < argc; i++) {
+        free(argv[i]);
+    }
+    free(argv);
    
-   //free args
-   for (i = 0; i < argc; i++) {
-       free(argv[i]);
-   }
-   free(argv);
+    LOGD("Free done");
    
-   __android_log_print(3,"LaunchJVM", "Free done");
-   
-   return res;
+    return res;
 }
 
 

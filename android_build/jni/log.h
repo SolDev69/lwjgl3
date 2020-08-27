@@ -1,7 +1,7 @@
 #ifdef __ANDROID__
 #include <android/log.h>
 
-#define TAG "BinaryExecutor"
+#define TAG "LaunchJVM"
 #endif
 
 #ifdef __cplusplus

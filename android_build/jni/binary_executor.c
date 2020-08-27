@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "log.h"
 
@@ -21,7 +22,7 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
-	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
+	// jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
 	android_update_LD_LIBRARY_PATH_t android_update_LD_LIBRARY_PATH;
 	
@@ -32,7 +33,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(
 		if (updateLdLibPath == NULL) {
 			char *dl_error_c = dlerror();
 			LOGE("Error getting symbol android_update_LD_LIBRARY_PATH: %s", dl_error_c);
-			(*env)->ThrowNew(env, exception_cls, dl_error_c);
+			// (*env)->ThrowNew(env, exception_cls, dl_error_c);
 		}
 	}
 	
@@ -46,7 +47,9 @@ JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv
 	const char* nameUtf = (*env)->GetStringUTFChars(env, name, 0);
 	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
 	if (!handle) {
-		LOGE("Failed to dlopen %s: %s", nameUtf, dlerror());
+		LOGE("dlopen %s failed: %s", nameUtf, dlerror());
+	} else {
+		LOGE("dlopen %s success", nameUtf);
 	}
 	(*env)->ReleaseStringUTFChars(env, name, nameUtf);
 	return handle != NULL;
@@ -59,13 +62,11 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_chdir(JNIEnv *env
 	return retval;
 }
 
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, /* jstring ldLibraryPath, */ jobjectArray cmdArgs) {
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
-	
 	jstring execFile = (*env)->GetObjectArrayElement(env, cmdArgs, 0);
 	
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
-
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	
 	// (*env)->ReleaseStringUTFChars(env, ldLibraryPath, ld_library_path_c);
@@ -91,3 +92,18 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	int cmd_argv = (*env)->GetArrayLength(env, cmdArgs);
 	return Main_Function(cmd_argv, convert_to_char(env, cmdArgs));
 }
+
+// METHOD 2
+/*
+JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeForkedBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
+	int x, status;
+	x = fork();
+	if (x > 0) {
+		wait(&status);
+	} else {
+		execvpe();
+	}
+	return status;
+}
+*/
+
