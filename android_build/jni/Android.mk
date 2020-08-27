@@ -59,7 +59,7 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -lEGL
 LOCAL_MODULE := binexecutor
 
-LOCAL_SRC_FILES := binary_executor.c binary_VMLauncher.c egl_swapBuffers.c binary_custom_dlopen.c
+LOCAL_SRC_FILES := binary_executor.c binary_VMLauncher.c egl_swapBuffers.c
 
 include $(BUILD_SHARED_LIBRARY)
 
