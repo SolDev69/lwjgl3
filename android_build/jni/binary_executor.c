@@ -3,9 +3,9 @@
 #include <stdlib.h>
 
 #include "log.h"
-#include "binary_custom_dlopen.h"
 
 typedef int (*Main_Function_t)(int, char**);
+typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
 
 char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
@@ -20,10 +20,31 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
     return cArray;
 }
 
-JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring ldLibraryPath, jstring name) {
-	const char* nameUtf = (*env)->GetStringUTFChars(env, name, 0);
+JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
+	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
+	
+	android_update_LD_LIBRARY_PATH_t android_update_LD_LIBRARY_PATH;
+	
+	void *libdl_handle = dlopen("libdl.so", RTLD_LAZY);
+	void *updateLdLibPath = dlsym(libdl_handle, "android_update_LD_LIBRARY_PATH");
+	if (updateLdLibPath == NULL) {
+		updateLdLibPath = dlsym(libdl_handle, "__loader_android_update_LD_LIBRARY_PATH");
+		if (updateLdLibPath == NULL) {
+			char *dl_error_c = dlerror();
+			LOGE("Error getting symbol android_update_LD_LIBRARY_PATH: %s", dl_error_c);
+			(*env)->ThrowNew(env, exception_cls, dl_error_c);
+		}
+	}
+	
+	android_update_LD_LIBRARY_PATH = (android_update_LD_LIBRARY_PATH_t) updateLdLibPath;
 	const char* ldLibPathUtf = (*env)->GetStringUTFChars(env, ldLibraryPath, 0);
-	void* handle = dlopen_ext(ldLibPathUtf, nameUtf, RTLD_GLOBAL | RTLD_LAZY);
+	android_update_LD_LIBRARY_PATH(ldLibPathUtf);
+	(*env)->ReleaseStringUTFChars(env, ldLibPath, ldLibPathUtf);
+}
+
+JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring name) {
+	const char* nameUtf = (*env)->GetStringUTFChars(env, name, 0);
+	void* handle = dlopen(ldLibPathUtf, nameUtf, RTLD_GLOBAL | RTLD_LAZY);
 	if (!handle) {
 		LOGE("Failed to dlopen %s: %s", nameUtf, dlerror());
 	}
