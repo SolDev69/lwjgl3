@@ -59,6 +59,9 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -lEGL
 LOCAL_MODULE := binexecutor
 
+# android_create_namespace
+LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
+
 LOCAL_SRC_FILES := binary_executor.c binary_VMLauncher.c egl_swapBuffers.c binary_custom_dlopen.c
 
 include $(BUILD_SHARED_LIBRARY)
