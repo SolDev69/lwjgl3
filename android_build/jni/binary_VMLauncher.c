@@ -34,7 +34,7 @@
 // #include "com_oracle_dalvik_VMLauncher.h"
 
 // PojavLancher: fixme: are these wrong?
-#define FULL_VERSION "1.11.0_01-ea-b19"
+#define FULL_VERSION "1.11.0_01-internal"
 #define DOT_VERSION "1.11.0_01"
 
 typedef jint JNI_CreateJavaVM_func(JavaVM **pvm, void **penv, void *args);
@@ -106,7 +106,7 @@ static jint launchJVM(int argc, char** argv) {
        0, NULL, 0, NULL,
        FULL_VERSION,
 	   DOT_VERSION, "java", "openjdk", JNI_FALSE,
-	   JNI_TRUE, JNI_FALSE, 0);
+	   JNI_FALSE, JNI_FALSE, 0);
 }
 
 /*
