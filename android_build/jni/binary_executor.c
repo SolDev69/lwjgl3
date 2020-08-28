@@ -49,7 +49,7 @@ JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv
 	if (!handle) {
 		LOGE("dlopen %s failed: %s", nameUtf, dlerror());
 	} else {
-		LOGE("dlopen %s success", nameUtf);
+		LOGD("dlopen %s success", nameUtf);
 	}
 	(*env)->ReleaseStringUTFChars(env, name, nameUtf);
 	return handle != NULL;
