@@ -55,6 +55,9 @@ typedef jint JLI_Launch_func(int argc, char ** argv, /* main argc, argc */
         jint ergo                               /* ergonomics class policy */
 );
 
+JavaVM *runtimeJavaVMPtr = NULL;;
+JNIEnv *runtimeJNIEnvPtr = NULL;
+
 JavaVM *dalvikJavaVMPtr = NULL;
 JNIEnv *dalvikJNIEnvPtr = NULL;
 
@@ -81,6 +84,32 @@ static void logArgs(int argc, char** argv) {
         LOGD("arg[%d]: %s", i, argv[i]);
     }
 */
+}
+
+int createJavaVM(int argc, char** argv) {
+    void *libjvm = dlopen("libjvm.so", RTLD_NOW + RTLD_GLOBAL);
+    if (libjvm == NULL) {
+        LOGE("dlopen failed to open %s (dlerror %s).", libjvmpath, dlerror());
+        return -1;
+    }
+
+	JNI_CreateJavaVM_func jl_JNI_CreateJavaVM = (CreateJavaVM_t)dlsym(libjvm, "JNI_CreateJavaVM");
+        if (jl_JNI_CreateJavaVM == NULL) {
+        LOGE("dlsym failed to get JNI_CreateJavaVM (dlerror %s).", dlerror());
+        return -1;
+    }
+	
+	JavaVMInitArgs vm_args;
+	JavaVMOption options[argc];
+	for (int i = 0; i < argc; i++) {
+		options[i].optionString = argv[i];
+	}
+	vm_args.version = JNI_VERSION_1_6;
+	vm_args.options = options;
+	vm_args.nOptions = argc;
+	vm_args.ignoreUnrecognized = JNI_TRUE;
+	
+	return JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);
 }
 
 static jint launchJVM(int argc, char** argv) {
@@ -110,7 +139,7 @@ static jint launchJVM(int argc, char** argv) {
    return pJLI_Launch(argc, argv, 
        0, NULL, 0, NULL,
        FULL_VERSION,
-	   DOT_VERSION, "java", "openjdk", JNI_FALSE,
+	   DOT_VERSION, *argv, *argv /* "java", "openjdk" */ , JNI_FALSE,
 	   JNI_TRUE, JNI_FALSE, 0);
 }
 
