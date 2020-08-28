@@ -101,20 +101,21 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNI
         return -1;
     }
 	
+	int vm_argc = (*env)->GetArrayLength(env, vmArgArr);
 	char **vm_argv = convert_to_char_array(env, vmArgArr);
 	
 	int main_argc = (*env)->GetArrayLength(env, mainArgArr);
 	char **main_argv = convert_to_char_array(env, mainArgArr);
 	
 	JavaVMInitArgs vm_args;
-	JavaVMOption options[argc];
-	for (int i = 0; i < argc; i++) {
+	JavaVMOption options[vm_argc];
+	for (int i = 0; i < vm_argc; i++) {
 		options[i].optionString = vm_argv[i];
 	}
 	vm_args.version = JNI_VERSION_1_6;
 	vm_args.options = options;
 	vm_args.nOptions = argc;
-	vm_args.ignoreUnrecognized = false;
+	vm_args.ignoreUnrecognized = JNI_FALSE;
 	
 	jint res = (jint) JNI_CreateJavaVM(&runtimeJavaVMPtr, (void**)&runtimeJNIEnvPtr, &vm_args);
 	delete options;
