@@ -32,6 +32,8 @@
 
 #include "log.h"
 
+#incluee "binary_utils.h"
+
 // Boardwalk: not used
 // #include "DalvikProxySelector.h"
 // #include "com_oracle_dalvik_VMLauncher.h"
@@ -86,8 +88,8 @@ static void logArgs(int argc, char** argv) {
 */
 }
 
-int createJavaVM(int argc, char** argv) {
-    void *libjvm = dlopen("libjvm.so", RTLD_NOW + RTLD_GLOBAL);
+JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNIEnv *env, jclass clazz, jobjectArray vmArgArr, jstring mainClassStr, jobjectArray mainArgArr) {
+	void *libjvm = dlopen("libjvm.so", RTLD_NOW + RTLD_GLOBAL);
     if (libjvm == NULL) {
         LOGE("dlopen failed to open %s (dlerror %s).", libjvmpath, dlerror());
         return -1;
@@ -99,17 +101,38 @@ int createJavaVM(int argc, char** argv) {
         return -1;
     }
 	
+	char **vm_argv = convert_to_char_array(env, vmArgArr);
+	
+	int main_argc = (*env)->GetArrayLength(env, mainArgArr);
+	char **main_argv = convert_to_char_array(env, mainArgArr);
+	
 	JavaVMInitArgs vm_args;
 	JavaVMOption options[argc];
 	for (int i = 0; i < argc; i++) {
-		options[i].optionString = argv[i];
+		options[i].optionString = vm_argv[i];
 	}
 	vm_args.version = JNI_VERSION_1_6;
 	vm_args.options = options;
 	vm_args.nOptions = argc;
-	vm_args.ignoreUnrecognized = JNI_TRUE;
+	vm_args.ignoreUnrecognized = false;
 	
-	return JNI_CreateJavaVM(&runtime_jvm, (void**)&runtime_env, &vm_args);
+	jint res = (jint) JNI_CreateJavaVM(&runtime_jvm, (void**)&runtime_env, &vm_args);
+	delete options;
+	
+	char *main_class_c = (*env)->GetStringUTFChars(env, mainClassStr, 0);
+	
+	jclass mainClass = (*runtime_env)->FindClass(runtime_env, main_class_c);
+	jmethodID mainMethod = (*runtime_env)->GetStaticMethodID(runtime_env, mainClass, "main", "([Ljava/lang/String;)V");
+
+	// Need recreate jobjectArray to make JNIEnv is 'runtime_env'.
+	jobjectArray runtime_main_argv = convert_from_char_array(runtime_env, main_argv, main_argc);
+	(*runtime_env)->CallStaticVoidMethod(runtime_env, mainClass, mainMethod, runtime_main_argv);
+	
+	(*env)->ReleaseStringUTFChars(env, mainClassStr, main_class_c);
+	free_char_args(env, mainArgArr, main_argv);
+	free_char_args(env, vmArgArr, vm_argv);
+	
+	return res;
 }
 
 static jint launchJVM(int argc, char** argv) {
@@ -137,10 +160,9 @@ static jint launchJVM(int argc, char** argv) {
    LOGD("Calling JLI_Launch");
 
    return pJLI_Launch(argc, argv, 
-       0, NULL, 0, NULL,
-       FULL_VERSION,
-	   DOT_VERSION, *argv, *argv /* "java", "openjdk" */ , JNI_FALSE,
-	   JNI_TRUE, JNI_FALSE, 0);
+       0, NULL, 0, NULL, FULL_VERSION,
+	   DOT_VERSION, *argv, *argv, /* "java", "openjdk", */
+	   JNI_FALSE, JNI_TRUE, JNI_FALSE, 0);
 }
 
 /*
@@ -148,10 +170,8 @@ static jint launchJVM(int argc, char** argv) {
  * Method:    launchJVM
  * Signature: ([Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM
-  (JNIEnv *env, jclass clazz, jobjectArray argsArray) {
+JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
    jint res = 0;
-   char **argv = NULL;
    int i;
 
     // Save dalvik JNIEnv pointer for JVM launch thread
@@ -164,41 +184,15 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM
     }
 
     int argc = (*env)->GetArrayLength(env, argsArray);
-
-    argv = calloc( (argc+1), sizeof(jbyte*) );
-
-    //copy args
-    for (i = 0; i < argc; i++) {
-        jstring stringElement = (jstring) (*env)->GetObjectArrayElement(env, argsArray, i);
-        // Boardwalk: this is a const char
-        const char *ansiString = (*env)->GetStringUTFChars(env, stringElement, NULL);
-        if (ansiString == NULL) {
-            //handle error
-            return 0;
-        }
-        // Boardwalk: also a char
-        argv[i] = calloc( (strlen(ansiString)+1), sizeof(char) );
-        if (argv[i] == NULL) {
-            //handle error
-            return 0;
-        }
-        strcpy(argv[i], ansiString);
-        // Boardwalk: remove redundant cast
-        (*env)->ReleaseStringUTFChars(env, stringElement, ansiString);
-    }
-    //add NULL element
-    argv[argc] = NULL;
-    LOGD("Done processing args ");
+	char **argv = convert_to_char_array(env, argsArray);
+	
+    LOGD("Done processing args");
 
     res = launchJVM(argc, argv);
 
     LOGD("Freeing args");
-    //free args
-    for (i = 0; i < argc; i++) {
-        free(argv[i]);
-    }
-    free(argv);
-   
+    free_char_array(env, argsArray, argv);
+	
     LOGD("Free done");
    
     return res;

@@ -5,10 +5,12 @@
 
 #include "log.h"
 
+#include "binary_utils.h"
+
 typedef int (*Main_Function_t)(int, char**);
 typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
 
-char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
+char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	char **cArray = (char **) malloc(num_rows * sizeof(char*));
 	jstring row;
@@ -17,8 +19,30 @@ char** convert_to_char(JNIEnv *env, jobjectArray jstringArray){
 		row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
 		cArray[i] = (char*)(*env)->GetStringUTFChars(env, row, 0);
     }
-		
+	
     return cArray;
+}
+
+jobjectArray convert_from_char_array(JNIEnv *env, char **charArray, int num_rows) {
+	jobjectArray resultArr = (*env)->NewObjectArray(env, num_rows, (*env)->FindClass(env, "java/lang/String"), NULL);
+	jstring row;
+	
+	for (int i = 0; i < num_rows; i++) {
+		row = (jstring) (*env)->NewStringUTF(env, charArray[i]);
+		(*env)->SetObjectArrayElement(env, resultArr, i, row);
+    }
+
+	return resultArr;
+}
+
+void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray) {
+	int num_rows = (*env)->GetArrayLength(env, jstringArray);
+	jstring row;
+	
+	for (int i = 0; i < num_rows; i++) {
+		row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
+		(*env)->ReleaseStringUTFChars(env, row, charArray[i]);
+	}
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
@@ -90,7 +114,10 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_executeBinary(JNI
 	}
 	
 	int cmd_argv = (*env)->GetArrayLength(env, cmdArgs);
-	return Main_Function(cmd_argv, convert_to_char(env, cmdArgs));
+	char **cmd_args_c = convert_to_char_array(env, cmdArgs);
+	int result = Main_Function(cmd_argv, cmd_args_c);
+	free_char_array(env, cmdArgs, cmd_args_c);
+	return result;
 }
 
 // METHOD 2
