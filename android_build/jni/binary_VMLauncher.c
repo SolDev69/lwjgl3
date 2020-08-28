@@ -107,28 +107,11 @@ static jint launchJVM(int argc, char** argv) {
 
    LOGD("Calling JLI_Launch");
 
-/*
    return pJLI_Launch(argc, argv, 
        0, NULL, 0, NULL,
        FULL_VERSION,
 	   DOT_VERSION, "java", "openjdk", JNI_FALSE,
 	   JNI_TRUE, JNI_FALSE, 0);
-*/
-
-	int x, status;
-	x = fork();
-	if (x > 0) {
-		wait(&status);
-	} else {
-		int result = pJLI_Launch(argc, argv, 
-			0, NULL, 0, NULL,
-			FULL_VERSION,
-			DOT_VERSION, "java", "openjdk", JNI_FALSE,
-			JNI_TRUE, JNI_FALSE, 0);
-			
-		// exit(result);
-	}
-	return status;
 }
 
 /*
