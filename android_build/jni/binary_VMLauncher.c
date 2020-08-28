@@ -117,7 +117,7 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNI
 	vm_args.nOptions = vm_argc;
 	vm_args.ignoreUnrecognized = JNI_FALSE;
 	
-	jint res = (jint) JNI_CreateJavaVM(&runtimeJavaVMPtr, (void**)&runtimeJNIEnvPtr, &vm_args);
+	jint res = (jint) jl_JNI_CreateJavaVM(&runtimeJavaVMPtr, (void**)&runtimeJNIEnvPtr, &vm_args);
 	// delete options;
 	
 	char *main_class_c = (*env)->GetStringUTFChars(env, mainClassStr, 0);
@@ -130,8 +130,8 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNI
 	(*runtimeJNIEnvPtr)->CallStaticVoidMethod(runtimeJNIEnvPtr, mainClass, mainMethod, runtime_main_argv);
 	
 	(*env)->ReleaseStringUTFChars(env, mainClassStr, main_class_c);
-	free_char_args(env, mainArgArr, main_argv);
-	free_char_args(env, vmArgArr, vm_argv);
+	free_char_array(env, mainArgArr, main_argv);
+	free_char_array(env, vmArgArr, vm_argv);
 	
 	return res;
 }
