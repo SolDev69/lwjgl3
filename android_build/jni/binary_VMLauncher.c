@@ -93,7 +93,7 @@ int createJavaVM(int argc, char** argv) {
         return -1;
     }
 
-	JNI_CreateJavaVM_func jl_JNI_CreateJavaVM = (CreateJavaVM_t)dlsym(libjvm, "JNI_CreateJavaVM");
+	JNI_CreateJavaVM_func jl_JNI_CreateJavaVM = (JNI_CreateJavaVM_func) dlsym(libjvm, "JNI_CreateJavaVM");
         if (jl_JNI_CreateJavaVM == NULL) {
         LOGE("dlsym failed to get JNI_CreateJavaVM (dlerror %s).", dlerror());
         return -1;
@@ -109,7 +109,7 @@ int createJavaVM(int argc, char** argv) {
 	vm_args.nOptions = argc;
 	vm_args.ignoreUnrecognized = JNI_TRUE;
 	
-	return JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);
+	return JNI_CreateJavaVM(&runtime_jvm, (void**)&runtime_env, &vm_args);
 }
 
 static jint launchJVM(int argc, char** argv) {
