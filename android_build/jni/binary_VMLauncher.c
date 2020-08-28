@@ -95,8 +95,7 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNI
         return -1;
     }
 
-	JNI_CreateJavaVM_func jl_JNI_CreateJavaVM;
-	jl_JNI_CreateJavaVM = (JNI_CreateJavaVM_func) dlsym(libjvm, "JNI_CreateJavaVM");
+	JNI_CreateJavaVM_func *jl_JNI_CreateJavaVM = (JNI_CreateJavaVM_func *) dlsym(libjvm, "JNI_CreateJavaVM");
         if (jl_JNI_CreateJavaVM == NULL) {
         LOGE("dlsym failed to get JNI_CreateJavaVM (dlerror %s).", dlerror());
         return -1;
