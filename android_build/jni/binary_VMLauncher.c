@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-#incluee "binary_utils.h"
+#include "binary_utils.h"
 
 // Boardwalk: not used
 // #include "DalvikProxySelector.h"
@@ -91,11 +91,12 @@ static void logArgs(int argc, char** argv) {
 JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNIEnv *env, jclass clazz, jobjectArray vmArgArr, jstring mainClassStr, jobjectArray mainArgArr) {
 	void *libjvm = dlopen("libjvm.so", RTLD_NOW + RTLD_GLOBAL);
     if (libjvm == NULL) {
-        LOGE("dlopen failed to open %s (dlerror %s).", libjvmpath, dlerror());
+        LOGE("dlopen failed to open libjvm.so (dlerror %s).", dlerror());
         return -1;
     }
 
-	JNI_CreateJavaVM_func jl_JNI_CreateJavaVM = (JNI_CreateJavaVM_func) dlsym(libjvm, "JNI_CreateJavaVM");
+	JNI_CreateJavaVM_func jl_JNI_CreateJavaVM;
+	jl_JNI_CreateJavaVM = (JNI_CreateJavaVM_func) dlsym(libjvm, "JNI_CreateJavaVM");
         if (jl_JNI_CreateJavaVM == NULL) {
         LOGE("dlsym failed to get JNI_CreateJavaVM (dlerror %s).", dlerror());
         return -1;
@@ -114,11 +115,11 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNI
 	}
 	vm_args.version = JNI_VERSION_1_6;
 	vm_args.options = options;
-	vm_args.nOptions = argc;
+	vm_args.nOptions = vm_argc;
 	vm_args.ignoreUnrecognized = JNI_FALSE;
 	
 	jint res = (jint) JNI_CreateJavaVM(&runtimeJavaVMPtr, (void**)&runtimeJNIEnvPtr, &vm_args);
-	delete options;
+	// delete options;
 	
 	char *main_class_c = (*env)->GetStringUTFChars(env, mainClassStr, 0);
 	
