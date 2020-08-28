@@ -116,17 +116,17 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_createLaunchMainJVM(JNI
 	vm_args.nOptions = argc;
 	vm_args.ignoreUnrecognized = false;
 	
-	jint res = (jint) JNI_CreateJavaVM(&runtime_jvm, (void**)&runtime_env, &vm_args);
+	jint res = (jint) JNI_CreateJavaVM(&runtimeJavaVMPtr, (void**)&runtimeJNIEnvPtr, &vm_args);
 	delete options;
 	
 	char *main_class_c = (*env)->GetStringUTFChars(env, mainClassStr, 0);
 	
-	jclass mainClass = (*runtime_env)->FindClass(runtime_env, main_class_c);
-	jmethodID mainMethod = (*runtime_env)->GetStaticMethodID(runtime_env, mainClass, "main", "([Ljava/lang/String;)V");
+	jclass mainClass = (*runtimeJNIEnvPtr)->FindClass(runtimeJNIEnvPtr, main_class_c);
+	jmethodID mainMethod = (*runtimeJNIEnvPtr)->GetStaticMethodID(runtimeJNIEnvPtr, mainClass, "main", "([Ljava/lang/String;)V");
 
-	// Need recreate jobjectArray to make JNIEnv is 'runtime_env'.
-	jobjectArray runtime_main_argv = convert_from_char_array(runtime_env, main_argv, main_argc);
-	(*runtime_env)->CallStaticVoidMethod(runtime_env, mainClass, mainMethod, runtime_main_argv);
+	// Need recreate jobjectArray to make JNIEnv is 'runtimeJNIEnvPtr'.
+	jobjectArray runtime_main_argv = convert_from_char_array(runtimeJNIEnvPtr, main_argv, main_argc);
+	(*runtimeJNIEnvPtr)->CallStaticVoidMethod(runtimeJNIEnvPtr, mainClass, mainMethod, runtime_main_argv);
 	
 	(*env)->ReleaseStringUTFChars(env, mainClassStr, main_class_c);
 	free_char_args(env, mainArgArr, main_argv);
