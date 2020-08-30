@@ -39,8 +39,8 @@
 // #include "com_oracle_dalvik_VMLauncher.h"
 
 // PojavLancher: fixme: are these wrong?
-#define FULL_VERSION "1.11.0_01-internal"
-#define DOT_VERSION "1.11"
+#define FULL_VERSION "1.9.0-internal"
+#define DOT_VERSION "1.9"
 
 typedef jint JNI_CreateJavaVM_func(JavaVM **pvm, void **penv, void *args);
 
@@ -173,7 +173,7 @@ static jint launchJVM(int argc, char** argv) {
  */
 JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
    jint res = 0;
-   int i;
+   // int i;
 
     // Save dalvik JNIEnv pointer for JVM launch thread
     dalvikJNIEnvPtr = env;
