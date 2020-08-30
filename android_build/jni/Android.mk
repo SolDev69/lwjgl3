@@ -27,8 +27,8 @@ LOCAL_MODULE    := lwjgl_opengl
 
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
-	) \
-	opengl_JniOnLoadShim.c
+	) 
+# opengl_JniOnLoadShim.c
 	
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 	$(LOCAL_PATH)/lwjgl/core/src/main/c/dyncall $(LOCAL_PATH)/lwjgl/core/src/main/c/linux \

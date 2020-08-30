@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setupBridgeEGL(JN
 }
 
 // Called from JNI_OnLoad of liblwjgl_opengl32
-void boardwalk2_openGLOnLoad() {
+JNIEXPORT jboolean JNICALL Java_org_lwjgl_glfw_GLFW_nativeEglMakeCurrent(JNIEnv *env, jclass clazz) {
 	printf("EGL making current\n");
 	EGLBoolean success = eglMakeCurrent(potatoBridge.eglDisplay, potatoBridge.eglDrawSurface, potatoBridge.eglReadSurface, potatoBridge.eglContext);
 	if (success == EGL_FALSE) printf("eglMakeCurrent() failed with error %p\n", eglGetError());
