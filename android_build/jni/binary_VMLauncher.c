@@ -65,16 +65,18 @@ JNIEnv *dalvikJNIEnvPtr = NULL;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
-    //Save dalvik global JavaVM pointer
-    dalvikJavaVMPtr = vm;
-    LOGD("JNI_OnLoad calling GetEnv()");
-    JNIEnv* env = NULL;
-    (*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_4);
+	if (dalvikJavaVMPtr == NULL) {
+		//Save dalvik global JavaVM pointer
+		dalvikJavaVMPtr = vm;
+		LOGD("JNI_OnLoad calling GetEnv()");
+		JNIEnv* env = NULL;
+		(*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_4);
 /* Boardwalk: not used
-    LOGD("JNI_OnLoad calling initDalvikProxySelectorData()");
-    initDalvikProxySelectorData(env);
+        LOGD("JNI_OnLoad calling initDalvikProxySelectorData()");
+        initDalvikProxySelectorData(env);
 */
-    LOGD("JNI_OnLoad returning()");
+	}
+	LOGD("JNI_OnLoad returning()");
     return JNI_VERSION_1_4;
 }
 

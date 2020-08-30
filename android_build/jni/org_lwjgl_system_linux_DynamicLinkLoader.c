@@ -18,7 +18,7 @@ JNIEXPORT jlong JNICALL Java_org_lwjgl_system_linux_DynamicLinkLoader_ndlopen(JN
     // Boardwalk: hardcode the load flags
     // Also, open the libGLESv1 library if we don't have it yet
     if (!glesHandle) {
-        glesHandle = dlopen("libGLESv1_CM.so", RTLD_GLOBAL | RTLD_LAZY);
+        glesHandle = dlopen("libGLESv2.so", RTLD_GLOBAL | RTLD_LAZY);
     }
     return (jlong)(intptr_t)dlopen(filename, RTLD_GLOBAL | RTLD_LAZY);
 }
