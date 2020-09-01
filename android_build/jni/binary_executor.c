@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <dlfcn.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -55,11 +56,19 @@ JNIEXPORT jlong JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIE
 	return (jlong) shared_awt_surface;
 }
 
-JNIEXPORT jlong JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNatives(JNIEnv *env, jclass clazz, jstring registerSymbol) {
+JNIEXPORT jint JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNatives(JNIEnv *env, jclass clazz, jstring registerSymbol) {
 	const char *register_symbol_c = (*env)->GetStringUTFChars(env, registerSymbol, 0);
-	void (*registerNativesForClass)(JNIEnv*) = dlsym(RTLD_DEFAULT, register_symbol_c);
-	registerNativesForClass(env);
+	void *symbol = dlsym(RTLD_DEFAULT, register_symbol_c);
+	if (symbol == NULL) {
+		printf("dlsym %s failed: %s\n", register_symbol_c, dlerror());
+		return -1;
+	}
+	
+	int (*registerNativesForClass)(JNIEnv*) = symbol;
+	int result = registerNativesForClass(env);
 	(*env)->ReleaseStringUTFChars(env, registerSymbol, register_symbol_c);
+	
+	return (jint) result;
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
