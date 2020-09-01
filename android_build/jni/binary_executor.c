@@ -55,6 +55,13 @@ JNIEXPORT jlong JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIE
 	return (jlong) shared_awt_surface;
 }
 
+JNIEXPORT jlong JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNatives(JNIEnv *env, jclass clazz, jstring registerSymbol) {
+	const char *register_symbol_c = (*env)->GetStringUTFChars(env, registerSymbol, 0);
+	void (*registerNativesForClass)(JNIEnv*) = dlsym(RTLD_DEFAULT, register_symbol_c);
+	registerNativesForClass(env);
+	(*env)->ReleaseStringUTFChars(env, registerSymbol, register_symbol_c);
+}
+
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
 	// jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
@@ -78,7 +85,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(
 }
 
 JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv *env, jclass clazz, jstring name) {
-	const char* nameUtf = (*env)->GetStringUTFChars(env, name, 0);
+	const char *nameUtf = (*env)->GetStringUTFChars(env, name, 0);
 	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
 	if (!handle) {
 		LOGE("dlopen %s failed: %s", nameUtf, dlerror());
@@ -90,7 +97,7 @@ JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_dlopen(JNIEnv
 }
 
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_chdir(JNIEnv *env, jclass clazz, jstring nameStr) {
-	const char* name = (*env)->GetStringUTFChars(env, nameStr, NULL);
+	const char *name = (*env)->GetStringUTFChars(env, nameStr, NULL);
 	int retval = chdir(name);
 	(*env)->ReleaseStringUTFChars(env, nameStr, name);
 	return retval;
