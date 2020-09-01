@@ -3,9 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <android/native_window.h>
-#include <android/native_window_jni.h>
-
 #include "log.h"
 
 #include "binary_utils.h"
@@ -13,7 +10,7 @@
 typedef int (*Main_Function_t)(int, char**);
 typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
 
-ANativeWindow* shared_awt_window;
+long shared_awt_surface;
 
 char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
@@ -50,12 +47,12 @@ void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charAr
 	}
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setupBridgeSurfaceAWT(JNIEnv *env, jclass clazz, jobject surface) {
-	shared_awt_window = ANativeWindow_fromSurface(env, surface);
+JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setupBridgeSurfaceAWT(JNIEnv *env, jclass clazz, jlong surface) {
+	shared_awt_surface = surface;
 }
 
-JNIEXPORT jobject JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIEnv *env, jclass clazz) {
-	return ANativeWindow_toSurface(env, shared_awt_window);
+JNIEXPORT jlong JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIEnv *env, jclass clazz) {
+	return (long) shared_awt_surface;
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
