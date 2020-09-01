@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <android/native_window.h>
+#include <android/native_window_jni.h>
+
 #include "log.h"
 
 #include "binary_utils.h"
