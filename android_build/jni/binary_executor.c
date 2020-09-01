@@ -10,6 +10,8 @@
 typedef int (*Main_Function_t)(int, char**);
 typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
 
+ANativeWindow* shared_awt_window;
+
 char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	char **cArray = (char **) malloc(num_rows * sizeof(char*));
@@ -43,6 +45,14 @@ void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charAr
 		row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
 		(*env)->ReleaseStringUTFChars(env, row, charArray[i]);
 	}
+}
+
+JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setupBridgeSurfaceAWT(JNIEnv *env, jclass clazz, jobject surface) {
+	shared_awt_window = ANativeWindow_fromSurface(env, surface);
+}
+
+JNIEXPORT jobject JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIEnv *env, jclass clazz) {
+	return ANativeWindow_toSurface(env, shared_awt_window);
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
