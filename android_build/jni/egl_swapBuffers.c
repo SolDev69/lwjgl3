@@ -79,7 +79,7 @@ void pojav_openGLOnLoad() {
 	// test eglQueryContext() 
 	{
         EGLint val;
-        eglQueryContext(potatoBridge.eglDisplay, ctx, EGL_CONTEXT_CLIENT_VERSION, &val);
+        eglQueryContext(potatoBridge.eglDisplay, potatoBridge.eglContext, EGL_CONTEXT_CLIENT_VERSION, &val);
         assert(val == 2);
     }
 	
