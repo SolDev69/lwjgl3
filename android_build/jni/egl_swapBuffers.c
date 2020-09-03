@@ -6,7 +6,7 @@
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
-ANativeWindow windowBridge;
+struct ANativeWindow* windowBridge;
 
 struct PotatoBridge {
 	void* eglContext;
