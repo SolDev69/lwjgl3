@@ -3,43 +3,121 @@
 #include <stdio.h>
 #include <EGL/egl.h>
 
+#include <android/native_window.h>
+#include <android/native_window_jni.h>
+
+ANativeWindow windowBridge;
+
 struct PotatoBridge {
 	void* eglContext;
 	void* eglDisplay;
+	void* eglSurface;
+/*
 	void* eglSurfaceRead;
 	void* eglSurfaceDraw;
+*/
 };
 struct PotatoBridge potatoBridge;
 
-JNIEXPORT void JNICALL Java_org_lwjgl_glfw_GLFW_setupEGL(JNIEnv* env, jclass clazz, jlong eglContext, jlong eglDisplay, jlong eglSurfaceRead, jlong eglSurfaceDraw) {
-	potatoBridge.eglContext = (intptr_t) eglContext;
-	potatoBridge.eglDisplay = (intptr_t) eglDisplay;
-	potatoBridge.eglSurfaceRead = (intptr_t) eglSurfaceRead;
-	potatoBridge.eglSurfaceDraw = (intptr_t) eglSurfaceDraw;
-}
-
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setupBridgeEGL(JNIEnv* env, jclass clazz) {
-	potatoBridge.eglContext = eglGetCurrentContext();
-	potatoBridge.eglDisplay = eglGetCurrentDisplay();
-	potatoBridge.eglSurfaceRead = eglGetCurrentSurface(EGL_READ);
-	potatoBridge.eglSurfaceDraw = eglGetCurrentSurface(EGL_DRAW);
+JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_BinaryExecutor_setupBridgeWindow(JNIEnv* env, jclass clazz, jobject surface) {
+	windowBridge = ANativeWindow_fromSurface(env, surface);
 }
 
 // Called from JNI_OnLoad of liblwjgl_opengl32
-void boardwalk2_openGLOnLoad() {
-	printf("EGL making current\n");
-	printf("EGLContext=%p, EGLDisplay=%p, EGLSurfaceRead=%p, EGLSurfaceDraw=%p\n",
+void pojav_openGLOnLoad() {
+	printf("ANativeWindow pointer = %p\n", windowBridge);
+	
+	potatoBridge.eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+	if (potatoBridge.eglDisplay == EGL_NO_DISPLAY) {
+		printf("Error: eglGetDefaultDisplay() failed: %p\n", eglGetError());
+		return; // -1;
+	}
+	
+	if (!eglInitialize(potatoBridge.eglDisplay, NULL, NULL)) {
+		printf("Error: eglInitialize() failed\n");
+		return; // -2;
+	}
+	
+	static const EGLint attribs[] = {
+		EGL_RED_SIZE, 1,
+		EGL_GREEN_SIZE, 1,
+		EGL_BLUE_SIZE, 1,
+		EGL_DEPTH_SIZE, 1,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+		EGL_NONE
+	};
+	static const EGLint ctx_attribs[] = {
+		EGL_CONTEXT_CLIENT_VERSION, 2,
+		EGL_NONE
+	};
+   
+	EGLConfig config;
+	EGLint num_configs;
+	EGLint vid;
+	
+	if (!eglChooseConfig(potatoBridge.eglDisplay, attribs, &config, 1, &num_configs)) {
+		printf("Error: couldn't get an EGL visual config\n");
+		return; // -3;
+	}
+	
+	assert(config);
+	assert(num_configs > 0);
+
+	if (!eglGetConfigAttrib(potatoBridge.eglDisplay, config, EGL_NATIVE_VISUAL_ID, &vid)) {
+		printf("Error: eglGetConfigAttrib() failed\n");
+		return; // -4;
+	}
+
+	eglBindAPI(EGL_OPENGL_ES_API);
+
+	potatoBridge.eglContext = eglCreateContext(potatoBridge.eglDisplay, config, EGL_NO_CONTEXT, ctx_attribs);
+	if (!potatoBridge.eglContext) {
+		printf("Error: eglCreateContext failed\n");
+		return; // -5;
+	}
+
+	// test eglQueryContext() 
+	{
+        EGLint val;
+        eglQueryContext(potatoBridge.eglDisplay, ctx, EGL_CONTEXT_CLIENT_VERSION, &val);
+        assert(val == 2);
+    }
+	
+	potatoBridge.eglSurface = eglCreateWindowSurface(potatoBridge.eglDisplay, config, windowBridge, NULL);
+	
+	if (!potatoBridge.eglSurface) {
+        printf("Error: eglCreateWindowSurface failed: %p\n", eglGetError());
+        return; // -6;
+    }
+	
+    // sanity checks
+    {
+        EGLint val;
+        assert(eglGetConfigAttrib(potatoBridge.eglDisplay, config, EGL_SURFACE_TYPE, &val));
+        assert(val & EGL_WINDOW_BIT);
+    }
+	
+	printf("EGLContext=%p, EGLDisplay=%p, EGLSurface=%p\n",
 		potatoBridge.eglContext,
 		potatoBridge.eglDisplay,
-		potatoBridge.eglSurfaceRead,
-		potatoBridge.eglSurfaceDraw 
+		potatoBridge.eglSurface 
 	);
-	EGLBoolean success = eglMakeCurrent(potatoBridge.eglDisplay, potatoBridge.eglSurfaceDraw, potatoBridge.eglSurfaceRead, potatoBridge.eglContext);
-	if (success == EGL_FALSE) printf("eglMakeCurrent() failed with error %p\n", eglGetError());
+	
+	if (eglMakeCurrent(potatoBridge.eglDisplay, potatoBridge.eglSurface, potatoBridge.eglSurface, potatoBridge.eglContext) == EGL_FALSE) {
+		printf("Error: eglMakeCurrent() failed: %p\n", eglGetError());
+	}
+}
+
+void pojav_openGLOnUnload() {
+	eglMakeCurrent(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+	eglDestroySurface(potatoBridge.eglDisplay, potatoBridge.eglSurface);
+	eglDestroyContext(potatoBridge.eglDisplay, potatoBridge.eglContext);
+	eglTerminate(potatoBridge.eglDisplay);
+	eglReleaseThread();
 }
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_glfw_GLFW_nativeEglSwapBuffers(JNIEnv *env, jclass clazz) {
-	  return eglSwapBuffers(potatoBridge.eglDisplay, potatoBridge.eglSurfaceDraw);
+	  return eglSwapBuffers(potatoBridge.eglDisplay, potatoBridge.eglSurface);
 }
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_glfw_GLFW_nativeEglSwapInterval(JNIEnv *env, jclass clazz, jint interval) {

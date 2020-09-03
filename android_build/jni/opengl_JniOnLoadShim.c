@@ -3,10 +3,18 @@
 #include <jni.h>
 #include <dlfcn.h>
 
+void* pojavJni;
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-	void* boardwalkJni = dlopen( /* "libboardwalk2_jni.so" */ "libbinexecutor.so", RTLD_GLOBAL | RTLD_LAZY);
-	void (*boardwalk2_openGLOnLoad)() = dlsym(boardwalkJni, "boardwalk2_openGLOnLoad");
-	boardwalk2_openGLOnLoad();
+	pojavJni = dlopen( /* "libboardwalk2_jni.so" */ "libbinexecutor.so", RTLD_GLOBAL | RTLD_LAZY);
+	void (*pojav_openGLOnLoad)() = dlsym(pojavJni, "pojav_openGLOnLoad");
+	pojav_openGLOnLoad();
 	return JNI_VERSION_1_2;
+}
+
+JNIEXPORT void JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
+	void (*pojav_openGLOnUnload)() = dlsym(pojavJni, "pojav_openGLOnUnload");
+	pojav_openGLOnUnload();
+	dlclose(pojavJni);
 }
 
