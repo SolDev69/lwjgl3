@@ -1,4 +1,5 @@
 #include <jni.h>
+#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <EGL/egl.h>
