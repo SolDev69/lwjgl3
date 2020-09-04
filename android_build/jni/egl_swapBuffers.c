@@ -34,6 +34,8 @@ void pojav_openGLOnLoad() {
 		return; // -1;
 	}
 	
+	eglMakeCurrent(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+	
 	if (!eglInitialize(potatoBridge.eglDisplay, NULL, NULL)) {
 		printf("Error: eglInitialize() failed\n");
 		return; // -2;
