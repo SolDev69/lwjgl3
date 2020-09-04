@@ -54,12 +54,3 @@ LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 
 include $(BUILD_SHARED_LIBRARY)
 
-# PojavLauncher lib to load OpenJDK bin/java executable
-include $(CLEAR_VARS)
-LOCAL_LDLIBS := -ldl -llog -lEGL -landroid
-LOCAL_MODULE := binexecutor
-
-LOCAL_SRC_FILES := binary_executor.c binary_VMLauncher.c egl_swapBuffers.c
-
-include $(BUILD_SHARED_LIBRARY)
-

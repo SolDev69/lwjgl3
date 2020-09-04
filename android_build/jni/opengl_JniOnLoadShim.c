@@ -6,7 +6,7 @@
 void* pojavJni;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-	pojavJni = dlopen( /* "libboardwalk2_jni.so" */ "libbinexecutor.so", RTLD_GLOBAL | RTLD_LAZY);
+	pojavJni = dlopen( /* "libboardwalk2_jni.so" */ "libpojavexec.so", RTLD_GLOBAL | RTLD_LAZY);
 	void (*pojav_openGLOnLoad)() = dlsym(pojavJni, "pojav_openGLOnLoad");
 	pojav_openGLOnLoad();
 	return JNI_VERSION_1_2;
