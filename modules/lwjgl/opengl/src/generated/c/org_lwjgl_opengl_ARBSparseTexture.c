@@ -18,7 +18,7 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_ARBSparseTexture_glTexPageCommitmen
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_ARBSparseTexture_glTexturePageCommitmentEXT(JNIEnv *__env, jclass clazz, jint texture, jint level, jint xoffset, jint yoffset, jint zoffset, jint width, jint height, jint depth, jboolean commit) {
     UNUSED_PARAM(clazz)
-    glTexturePageCommitmentEXT(texture, level, xoffset, yoffset, zoffset, width, height, depth, commit);
+    //glTexturePageCommitmentEXT(texture, level, xoffset, yoffset, zoffset, width, height, depth, commit);
 }
 
 EXTERN_C_EXIT
