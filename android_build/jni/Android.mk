@@ -24,7 +24,7 @@ include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_LDLIBS := -llog -lEGL -l
 LOCAL_MODULE    := lwjgl_opengl
-
+LOCAL_SHARED_LIBRARIES := mdlRegal
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
 	) \
@@ -58,3 +58,4 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := mdlRegal
 LOCAL_SRC_FILES := $(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/regal/include
+include $(BUILD_SHARED_LIBRARY)
