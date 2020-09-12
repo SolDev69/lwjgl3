@@ -22,7 +22,7 @@ LOCAL_LDLIBS := $(LOCAL_PATH)/$(TARGET_ARCH_ABI)/libdyncall_s.a \
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -lEGL
+LOCAL_LDLIBS := -llog -lEGL -l
 LOCAL_MODULE    := lwjgl_opengl
 
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
@@ -54,3 +54,7 @@ LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 
 include $(BUILD_SHARED_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := mdlRegal
+LOCAL_SRC_FILES := $(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/regal/include
