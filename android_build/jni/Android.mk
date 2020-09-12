@@ -29,7 +29,7 @@ LOCAL_LDLIBS := $(LOCAL_PATH)/$(TARGET_ARCH_ABI)/libdyncall_s.a \
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -lEGL -$(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so
+LOCAL_LDLIBS := -llog -lEGL -l"$(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so"
 LOCAL_MODULE    := lwjgl_opengl
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
