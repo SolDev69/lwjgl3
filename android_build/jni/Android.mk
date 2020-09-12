@@ -29,7 +29,7 @@ LOCAL_LDLIBS := $(LOCAL_PATH)/$(TARGET_ARCH_ABI)/libdyncall_s.a \
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -lEGL -l
+LOCAL_LDLIBS := -llog -lEGL
 LOCAL_MODULE    := lwjgl_opengl
 LOCAL_SHARED_LIBRARIES := mdlRegal
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
