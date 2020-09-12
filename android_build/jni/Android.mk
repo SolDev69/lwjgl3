@@ -39,7 +39,8 @@ LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 	$(LOCAL_PATH)/lwjgl/core/src/main/c/dyncall $(LOCAL_PATH)/lwjgl/core/src/main/c/linux \
-	$(LOCAL_PATH)/lwjgl/opengl/src/main/c
+	$(LOCAL_PATH)/lwjgl/opengl/src/main/c \
+	$(LOCAL_PATH)/regal/include
 
 LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 
