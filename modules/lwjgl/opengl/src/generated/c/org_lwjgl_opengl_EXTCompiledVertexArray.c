@@ -1,3 +1,5 @@
+#include <GL/Regal.h>
+
 /*
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
@@ -6,19 +8,15 @@
 #include "common_tools.h"
 #include "opengl.h"
 
-typedef void (APIENTRY *glLockArraysEXTPROC) (jint, jint);
-typedef void (APIENTRY *glUnlockArraysEXTPROC) (void);
 
 EXTERN_C_ENTER
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_EXTCompiledVertexArray_glLockArraysEXT(JNIEnv *__env, jclass clazz, jint first, jint count) {
-    glLockArraysEXTPROC glLockArraysEXT = (glLockArraysEXTPROC)tlsGetFunction(1466);
     UNUSED_PARAM(clazz)
     glLockArraysEXT(first, count);
 }
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_EXTCompiledVertexArray_glUnlockArraysEXT(JNIEnv *__env, jclass clazz) {
-    glUnlockArraysEXTPROC glUnlockArraysEXT = (glUnlockArraysEXTPROC)tlsGetFunction(1467);
     UNUSED_PARAM(clazz)
     glUnlockArraysEXT();
 }

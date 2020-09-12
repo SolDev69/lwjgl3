@@ -1,3 +1,5 @@
+#include <GL/Regal.h>
+
 /*
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
@@ -6,12 +8,10 @@
 #include "common_tools.h"
 #include "opengl.h"
 
-typedef void (APIENTRY *glProvokingVertexEXTPROC) (jint);
 
 EXTERN_C_ENTER
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_EXTProvokingVertex_glProvokingVertexEXT(JNIEnv *__env, jclass clazz, jint mode) {
-    glProvokingVertexEXTPROC glProvokingVertexEXT = (glProvokingVertexEXTPROC)tlsGetFunction(1781);
     UNUSED_PARAM(clazz)
     glProvokingVertexEXT(mode);
 }
