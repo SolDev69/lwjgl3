@@ -31,11 +31,11 @@ include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_LDLIBS := -llog -lEGL
 LOCAL_MODULE    := lwjgl_opengl
-LOCAL_SHARED_LIBRARIES := mdlRegal
 LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
 	$(wildcard $(LOCAL_PATH)/lwjgl/opengl/src/generated/c/*.c) \
 	) \
-	opengl_JniOnLoadShim.c
+	opengl_JniOnLoadShim.c \
+	$(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so
 	
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 	$(LOCAL_PATH)/lwjgl/core/src/main/c/dyncall $(LOCAL_PATH)/lwjgl/core/src/main/c/linux \
