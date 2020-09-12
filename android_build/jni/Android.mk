@@ -1,4 +1,11 @@
 LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := mdlRegal
+LOCAL_SRC_FILES := $(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/regal/include
+include $(BUILD_SHARED_LIBRARY)
+
 include $(CLEAR_VARS)  
 LOCAL_LDLIBS := -llog
 LOCAL_MODULE    := lwjgl
@@ -52,10 +59,4 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
 
 LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 
-include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := mdlRegal
-LOCAL_SRC_FILES := $(LOCAL_PATH)/regal/$(TARGET_ARCH_ABI)/libRegal.so
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/regal/include
 include $(BUILD_SHARED_LIBRARY)
