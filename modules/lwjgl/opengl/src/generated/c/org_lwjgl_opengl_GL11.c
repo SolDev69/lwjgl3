@@ -3,6 +3,8 @@
  * License terms: https://www.lwjgl.org/license
  * MACHINE GENERATED FILE, DO NOT EDIT
  */
+
+//!mod! by artdeel: dgl calls4regal
 #include "common_tools.h"
 #include "opengl.h"
 
