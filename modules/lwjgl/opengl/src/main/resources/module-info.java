@@ -8,4 +8,5 @@ module org.lwjgl.opengl {
     requires static org.lwjgl.input;
 
     exports org.lwjgl.opengl;
+    exports org.lwjgl.util;
 }
