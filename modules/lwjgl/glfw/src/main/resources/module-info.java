@@ -11,4 +11,5 @@ module org.lwjgl.glfw {
 
     exports org.lwjgl.glfw;
     exports org.lwjgl.input;
+    exports org.lwjgl.opengl;
 }
