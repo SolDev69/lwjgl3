@@ -361,6 +361,7 @@
             <compileBinding binding="libdivide"/>
             <compileBinding binding="llvm"/>
             <compileBinding binding="lmdb"/>
+            <compileBinding binding="lwjglx"/>
             <compileBinding binding="lz4"/>
             <compileBinding binding="meow"/>
             <compileBinding binding="nanovg"/>
