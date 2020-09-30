@@ -11,6 +11,7 @@ import java.nio.*;
 
 import org.lwjgl.*;
 
+import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.system.*;
 
 import static org.lwjgl.system.APIUtil.*;
