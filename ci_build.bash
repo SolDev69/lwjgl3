@@ -6,8 +6,8 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
 
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
 # Ignore ant build, since we are only building native code
-# ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
-# 	ant -Dbinding.driftfx=false compile-templates compile
+ ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
+	ant -Dbinding.driftfx=false compile-templates compile
 
 cd android_build
 

@@ -64,6 +64,29 @@ public class ALC10 {
             caps.alcGetEnumValue, caps.alcGetError, caps.alcGetString, caps.alcGetIntegerv
         );
 	}
+    
+// -- Begin LWJGL2 --
+    static ALCContext alcContext;
+    
+    public static ALCcontext alcCreateContext(ALCdevice device, java.nio.IntBuffer attrList) {
+        long alContextHandle = alcCreateContext(device.device, attrList);
+        alcContext = new ALCcontext(alContextHandle);
+        return alcContext;
+    }
+
+    public static ALCcontext alcGetCurrentContext() {
+        return alcContext;
+    }
+
+    public static ALCdevice alcGetContextsDevice(ALCcontext context) {
+        return AL.alcDevice;
+    }
+
+    public static void alcGetInteger(ALCdevice device, int pname, java.nio.IntBuffer integerdata) {
+        int res = alcGetInteger(device.device, pname);
+        integerdata.put(0, res);
+	}
+// -- End LWJGL2 --
 
     // --- [ alcOpenDevice ] ---
 

@@ -198,6 +198,51 @@ public class GL20 extends GL15 {
             caps.glStencilFuncSeparate, caps.glStencilMaskSeparate
         );
     }
+    
+// -- Begin LWJGL2 part --
+    public static void glVertexAttribPointer(int index, int size,
+                                             boolean unsigned, boolean normalized,
+                                             int stride, ByteBuffer buffer) {
+        int type = unsigned ? GL11.GL_UNSIGNED_BYTE : GL11.GL_BYTE;
+        GL20.glVertexAttribPointer(index, size, type, normalized, stride, buffer);
+    }
+
+    public static void glVertexAttribPointer(int index, int size,
+                                             boolean unsigned, boolean normalized,
+                                             int stride, ShortBuffer buffer) {
+        GL20.nglVertexAttribPointer(index, size, unsigned ? GL11.GL_UNSIGNED_SHORT : GL11.GL_SHORT, normalized, stride, MemoryUtil.memAddress(buffer));
+    }
+
+    public static void glVertexAttribPointer(int index, int size,
+                                             boolean unsigned, boolean normalized,
+                                             int stride, IntBuffer buffer) {
+        GL20.nglVertexAttribPointer(index, size, unsigned ? GL11.GL_UNSIGNED_INT : GL11.GL_INT, normalized, stride, MemoryUtil.memAddress(buffer));
+    }
+
+    public static String glGetActiveAttrib(int program, int index, int maxLength,
+                                           IntBuffer sizeType) {
+        //TODO check if correct
+        IntBuffer type = BufferUtils.createIntBuffer(1);
+        String s = GL20.glGetActiveAttrib(program, index, maxLength, sizeType, type);
+        sizeType.put(type.get(0));
+        return s;
+    }
+
+    public static String glGetActiveUniform(int program, int index, int maxLength,
+                                            IntBuffer sizeType) {
+        //TODO if correct
+        IntBuffer type = BufferUtils.createIntBuffer(1);
+        String s = GL20.glGetActiveUniform(program, index, maxLength, sizeType, type);
+        sizeType.put(type.get(0));
+        return s;
+    }
+
+    public static void glShaderSource(int shader, java.nio.ByteBuffer string) {
+        byte[] b = new byte[string.remaining()];
+        string.get(b);
+        org.lwjgl.opengl.GL20.glShaderSource(shader, new String(b));
+	}
+// -- End LWJGL2 part --
 
     // --- [ glCreateProgram ] ---
 

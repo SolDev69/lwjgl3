@@ -452,6 +452,13 @@ public class AL10 {
         long __functionAddress = AL.getICD().alDopplerVelocity;
         invokeV(dopplerVelocity, __functionAddress);
     }
+    
+    // --- [ alListener ] ---
+    
+    // Backwards compatible with LWJGL2
+    public static void alListener(int pname, java.nio.FloatBuffer value) {
+        alListenerfv(pname, value);
+	}
 
     // --- [ alListenerf ] ---
 

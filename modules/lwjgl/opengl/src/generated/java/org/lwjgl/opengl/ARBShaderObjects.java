@@ -104,6 +104,14 @@ public class ARBShaderObjects {
         );
     }
 
+// -- Begin LWJGL2 part --
+    public static void glShaderSourceARB(int shader, java.nio.ByteBuffer string) {
+        byte[] b = new byte[string.remaining()];
+        string.get(b);
+        org.lwjgl.opengl.ARBShaderObjects.glShaderSourceARB(shader, new String(b));
+    }
+// -- End LWJGL2 part --
+    
     // --- [ glDeleteObjectARB ] ---
 
     /**

@@ -42,7 +42,62 @@ import static org.lwjgl.system.MemoryUtil.*;
  * @see ALC
  */
 public final class AL {
+// -- Begin LWJGL2 part --
+    static {
+        // FIXME should be?
+        // Sys.initialize(); // init using dummy sys method
+	}
+    static long alContext;
+    static ALCdevice alcDevice;
+    static ALCCapabilities alContextCaps;
+	static ALCapabilities alCaps;
+    
+    private static boolean created_lwjgl2 = false;
+    
+    public static void create() throws LWJGLException {
+        if (alContext == MemoryUtil.NULL) {
+            //ALDevice alDevice = ALDevice.create();
+            long alDevice = ALC10.alcOpenDevice((ByteBuffer)null);
+            if(alDevice == MemoryUtil.NULL){
+                throw new LWJGLException("Cannot open the device");
+            }
 
+            IntBuffer attribs = BufferUtils.createIntBuffer(16);
+
+            attribs.put(ALC10.ALC_FREQUENCY);
+            attribs.put(44100);
+
+            attribs.put(ALC10.ALC_REFRESH);
+            attribs.put(60);
+
+            attribs.put(ALC10.ALC_SYNC);
+            attribs.put(ALC10.ALC_FALSE);
+
+            attribs.put(0);
+            attribs.flip();
+
+            long contextHandle = ALC10.alcCreateContext(alDevice, attribs);
+            ALC10.alcMakeContextCurrent(contextHandle);
+            //alContext = new ALContext(alDevice, contextHandle);
+            alContext = ALC10.alcCreateContext(contextHandle, (IntBuffer)null);
+            alContextCaps = ALC.createCapabilities(alContext);
+
+            alCaps = AL.createCapabilities(alContextCaps);
+
+            alcDevice = new ALCdevice(alDevice);
+            created_lwjgl2 = true;
+        }
+	}
+    
+    public static boolean isCreated() {
+        return created_lwjgl2;
+	}
+    
+    public static ALCdevice getDevice() {
+        return alcDevice;
+	}
+// -- End LWJGL2 part
+    
     @Nullable
     private static FunctionProvider functionProvider;
 
@@ -76,6 +131,16 @@ public final class AL {
     static void destroy() {
         if (functionProvider == null) {
             return;
+        }
+        
+        // LWJGL2 code
+        if (created_lwjgl2) {
+            ALC10.alcMakeContextCurrent(MemoryUtil.NULL);
+            ALC10.alcDestroyContext(alContext);
+            ALC10.alcCloseDevice(alcDevice.device);
+            alContext = -1;
+            alcDevice = null;
+            created_lwjgl2 = false;
         }
 
         setCurrentProcess(null);
