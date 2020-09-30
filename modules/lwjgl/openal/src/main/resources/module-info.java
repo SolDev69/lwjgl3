@@ -6,5 +6,4 @@ module org.lwjgl.openal {
     requires transitive org.lwjgl;
 
     exports org.lwjgl.openal;
-    exports org.lwjgl.util;
 }

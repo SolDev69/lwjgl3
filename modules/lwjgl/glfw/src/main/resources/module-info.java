@@ -10,7 +10,7 @@ module org.lwjgl.glfw {
     requires static org.lwjgl.vulkan;
 
     exports org.lwjgl.glfw;
-    exports org.lwjgl.input;
-    exports org.lwjgl.opengl;
-    exports org.lwjgl.util;
+    // exports org.lwjgl.input;
+    // exports org.lwjgl.opengl;
+    // exports org.lwjgl.util;
 }
