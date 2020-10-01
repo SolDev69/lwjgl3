@@ -17,13 +17,19 @@ jobs:
     - name: Build with CI build script
       run: ./ci_build.bash
 
-    - name: Upload build output
+    - name: Upload libraries output
+      uses: actions/upload-artifact@v1
+      with:
+        name: lwjgl3-libraries
+        path: bin/libs
+
+    - name: Upload native build output
       uses: actions/upload-artifact@v1
       with:
         name: lwjgl3-android-natives
         path: android_build/libs
 
-    - name: Upload debug build output
+    - name: Upload debug native build output
       uses: actions/upload-artifact@v1
       with:
         name: lwjgl3-debug-android-natives
