@@ -9,6 +9,8 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 	ant -Dbinding.driftfx=false compile-templates compile
 
+ls *
+
 cd android_build
 
 # Build dyncall-1.0
