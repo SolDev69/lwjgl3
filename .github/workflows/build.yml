@@ -21,7 +21,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: lwjgl3-libraries
-        path: bin/libs
+        path: bin/classes
 
     - name: Upload native build output
       uses: actions/upload-artifact@v1
