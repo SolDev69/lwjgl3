@@ -17,11 +17,11 @@ jobs:
     - name: Build with CI build script
       run: ./ci_build.bash
 
-    - name: Upload libraries output
+    - name: Upload GLFW generated
       uses: actions/upload-artifact@v1
       with:
         name: lwjgl3-libraries
-        path: bin/classes
+        path: modules/lwjgl/glfw
 
     - name: Upload native build output
       uses: actions/upload-artifact@v1
