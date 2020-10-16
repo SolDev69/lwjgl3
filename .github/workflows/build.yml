@@ -17,6 +17,12 @@ jobs:
     - name: Build with CI build script
       run: ./ci_build.bash
 
+    - name: Upload modules release output
+      uses: actions/upload-artifact@v1
+      with:
+        name: lwjgl3-modules
+        path: bin/RELEASE
+
     - name: Upload native build output
       uses: actions/upload-artifact@v1
       with:
