@@ -9,7 +9,7 @@ wget http://beanshell.org/bsh-2.0b5.jar
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
-	ant -lib bsh-2.0b5.jar -Dbinding.driftfx=false compile-templates compile release
+	ant -lib . -Dbinding.driftfx=false compile-templates compile release
 
 # ls *
 
