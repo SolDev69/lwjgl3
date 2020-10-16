@@ -5,11 +5,12 @@ set -e
 export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
 
 wget http://beanshell.org/bsh-2.0b5.jar
+mv bsh-2.0b5.jar $ANT_HOME/lib
 
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
-	ant -lib . -Dbinding.driftfx=false compile-templates compile release
+	ant -Dbinding.driftfx=false compile-templates compile release
 
 # ls *
 
