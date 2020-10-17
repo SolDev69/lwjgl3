@@ -7,18 +7,6 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
 # wget http://beanshell.org/bsh-2.0b5.jar
 # mv bsh-2.0b5.jar $ANT_HOME/lib
 
-currpath=`pwd`
-cd $ANT_HOME/lib
-wget https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-1.7.13.jar
-
-wget https://downloads.apache.org/commons/bsf/binaries/bsf-3.1-bin.zip
-unzip bsf-3.1-bin.zip bsf-3.1/lib/*.jar
-
-wget https://downloads.apache.org//commons/logging/binaries/commons-logging-1.2-bin.zip
-unzip commons-logging-1.2-bin.zip commons-logging-1.2/*.jar
-
-cd $currpath
-
 ant -version
 
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
