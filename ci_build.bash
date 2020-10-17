@@ -9,9 +9,8 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
 
 # use ant 1.10.9 to fix JavaScript bug
 wget https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.9-bin.tar.gz
-mkdir ant-binaries
-tar xvf apache-ant-1.10.9-bin.tar.gz -C ant-binaries
-export ANT_HOME=`pwd`/ant-binaries
+tar xvf apache-ant-1.10.9-bin.tar.gz
+export ANT_HOME=`pwd`/apache-ant-1.10.9
 export PATH=$ANT_HOME/bin:$PATH
 
 ant -version
