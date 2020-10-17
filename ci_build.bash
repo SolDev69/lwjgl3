@@ -7,11 +7,17 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
 # wget http://beanshell.org/bsh-2.0b5.jar
 # mv bsh-2.0b5.jar $ANT_HOME/lib
 
-# use ant 1.10.9 to fix JavaScript bug
-wget https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.9-bin.tar.gz
-tar xvf apache-ant-1.10.9-bin.tar.gz
-export ANT_HOME=`pwd`/apache-ant-1.10.9
-export PATH=$ANT_HOME/bin:$PATH
+currpath=`pwd`
+cd $ANT_HOME/lib
+wget https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-1.7.13.jar
+
+wget https://downloads.apache.org/commons/bsf/binaries/bsf-3.1-bin.zip
+unzip bsf-3.1-bin.zip -i bsf-3.1/lib/*.jar
+
+wget https://downloads.apache.org//commons/logging/binaries/commons-logging-1.2-bin.zip
+unzip commons-logging-1.2-bin.zip -i commons-logging-1.2/*.jar
+
+cd $currpath
 
 ant -version
 
