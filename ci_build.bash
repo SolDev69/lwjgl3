@@ -12,7 +12,9 @@ ant -version
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
-	ant -Dbinding.driftfx=false compile-templates compile release | y # continue build use jdk8
+
+# continue build use jdk8
+echo y | ant -Dbinding.driftfx=false compile-templates compile release
 
 # ls *
 
