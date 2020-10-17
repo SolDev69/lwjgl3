@@ -13,8 +13,7 @@ ant -version
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 
-# continue build use jdk8
-echo y | ant -Dbinding.driftfx=false compile-templates compile release
+ant -Dbinding.driftfx=false compile-templates compile release
 
 # ls *
 
