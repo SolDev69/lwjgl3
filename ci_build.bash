@@ -7,6 +7,13 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
 # wget http://beanshell.org/bsh-2.0b5.jar
 # mv bsh-2.0b5.jar $ANT_HOME/lib
 
+# use ant 1.10.9 to fix JavaScript bug
+wget https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.9-bin.tar.gz
+mkdir ant-binaries
+tar -C ant-binaries xvf apache-ant-1.10.9-bin.tar.gz
+export ANT_HOME=`pwd`/ant-binaries
+export PATH=$ANT_HOME/bin:$PATH
+
 ant -version
 
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
