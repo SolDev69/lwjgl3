@@ -114,7 +114,8 @@ This script is included in /config/build-definitions.xml.
         </condition>
         <fail if="dependency_problem" message="The stb and OpenGL or OpenGL ES bindings are required."/>
 
-        <script language="javascript">
+        <!-- <script language="javascript"> -->
+        <script manager="javax" language="javascript" classpath="${java.home}/lib/ext/nashorn.jar">
         var props = LWJGL.getProperties();
 
         var modules = ["core"];
