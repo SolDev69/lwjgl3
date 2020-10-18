@@ -36,7 +36,7 @@ package org.lwjgl.openal;
  * Thrown by the debug build library of the LWJGL if any OpenAL operation
  * causes an error.
  * 
- * @author Brian Matzon <brian@matzon.dk>
+ * @author Brian Matzon brian@matzon.dk
  * @version $Revision$
  * $Id$
  */

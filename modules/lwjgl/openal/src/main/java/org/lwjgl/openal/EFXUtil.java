@@ -13,10 +13,10 @@ import org.lwjgl.openal.ALCCapabilities;
 /**
  * Utility class for the OpenAL extension AL_EXT_EFX. Provides functions to check for the extension
  * and support of various effects and filters.
- * <p/>
+ *
  * Currently supports AL_EXT_EFX version 1.0 effects and filters.
  *
- * @author Ciardhubh <ciardhubh[at]ciardhubh.de>
+ * @author Ciardhubh ciardhubh[at]ciardhubh.de
  */
 public final class EFXUtil {
 

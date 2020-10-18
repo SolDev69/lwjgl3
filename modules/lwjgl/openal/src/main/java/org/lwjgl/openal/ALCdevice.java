@@ -43,7 +43,7 @@ import java.util.HashMap;
  * including a single hardware output device. The details are left to the implementation,
  * which has to map the available backends to unique device specifiers.
  *
- * @author Brian Matzon <brian@matzon.dk>
+ * @author Brian Matzon brian@matzon.dk
  * @version $Revision$
  * $Id$
  */

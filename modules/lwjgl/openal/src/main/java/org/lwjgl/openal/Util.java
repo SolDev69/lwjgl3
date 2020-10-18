@@ -35,8 +35,8 @@ package org.lwjgl.openal;
 /**
  * Simple utility class for checking AL/ALC errors
  *
- * @author cix_foo <cix_foo@users.sourceforge.net>
- * @author Brian Matzon <brian@matzon.dk>
+ * @author cix_foo cix_foo@users.sourceforge.net
+ * @author Brian Matzon brian@matzon.dk
  * @version $Revision$
  */
 

@@ -45,7 +45,7 @@ import org.lwjgl.BufferUtils;
  * Applications can have multiple threads that share one more or contexts. In other words,
  * AL and ALC are threadsafe.
  *
- * @author Brian Matzon <brian@matzon.dk>
+ * @author Brian Matzon brian@matzon.dk
  * @version $Revision$
  * $Id$
  */
