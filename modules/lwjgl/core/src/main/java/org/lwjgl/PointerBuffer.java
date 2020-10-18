@@ -53,7 +53,7 @@ public class PointerBuffer extends CustomBuffer<PointerBuffer> implements Compar
     }
     
     /**
-     * Returns this buffer's position, in bytes. </p>
+     * Returns this buffer's position, in bytes.
      *
      * @return The position of this buffer in bytes.
      */
@@ -63,7 +63,7 @@ public class PointerBuffer extends CustomBuffer<PointerBuffer> implements Compar
 
     /**
      * Returns the number of bytes between the current position and the
-     * limit. </p>
+     * limit.
      *
      * @return The number of bytes remaining in this buffer
      */
@@ -74,18 +74,18 @@ public class PointerBuffer extends CustomBuffer<PointerBuffer> implements Compar
     /**
      * Creates a new, read-only pointer buffer that shares this buffer's
      * content.
-     * <p/>
-     * <p> The content of the new buffer will be that of this buffer.  Changes
+     *
+     * The content of the new buffer will be that of this buffer.  Changes
      * to this buffer's content will be visible in the new buffer; the new
      * buffer itself, however, will be read-only and will not allow the shared
      * content to be modified.  The two buffers' position, limit, and mark
      * values will be independent.
-     * <p/>
+     * 
      * <p> The new buffer's capacity, limit and position will be
      * identical to those of this buffer.
-     * <p/>
+     *
      * <p> If this buffer is itself read-only then this method behaves in
-     * exactly the same way as the {@link #duplicate duplicate} method.  </p>
+     * exactly the same way as the {@link #duplicate duplicate} method.
      *
      * @return The new, read-only pointer buffer
      */

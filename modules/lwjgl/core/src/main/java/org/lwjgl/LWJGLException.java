@@ -37,7 +37,7 @@ package org.lwjgl;
  * specific exceptions
  * </p>
  * 
- * @author Brian Matzon <brian@matzon.dk>
+ * @author Brian Matzon brian@matzon.dk
  * @version $Revision$ $Id$
  */
 public class LWJGLException extends Exception {
