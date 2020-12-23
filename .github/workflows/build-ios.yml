@@ -1,0 +1,31 @@
+name: Build lwjgl3
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build with CI build script
+      run: ./ci_build_ios.bash
+
+    #- name: Upload modules release output
+    #  uses: actions/upload-artifact@v1
+    #  with:
+    #    name: lwjgl3-modules
+    #    path: bin/RELEASE
+
+    - name: Upload native build output
+      uses: actions/upload-artifact@v1
+      with:
+        name: lwjgl3-ios-natives
+        path: ios_build/libs
+
+    #- name: Upload debug native build output
+    #  uses: actions/upload-artifact@v1
+    #  with:
+    #    name: lwjgl3-debug-android-natives
+    #    path: android_build/libs_debug
