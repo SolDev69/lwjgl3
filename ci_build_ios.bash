@@ -23,8 +23,8 @@ ant -version
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
-
-ant -Dplatform.ios=true -Dbinding.bullet=false -Dbinding.driftfx=false compile-templates compile release
+export LWJGL_BUILD_ARCH=arm64
+ant -Dplatform.ios=true -Dplatform.macos=false -Dbinding.bullet=false -Dbinding.driftfx=false compile-templates compile compile-native release
 
 # Build LWJGL Android native libraries
 "$ANDROID_NDK_HOME/ndk-build"
