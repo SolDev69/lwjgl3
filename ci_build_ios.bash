@@ -16,34 +16,17 @@ chmod +x build_dyncall.bash
 
 # FIXME make it better, ex put to function
 # But it compile error!
-(cd dyncall-1.0/ios_arm64_build/ && make)
+(cd dyncall-1.0 && make)
 # (cd dyncall-1.0/android_arm_build/ && make)
 # (cd dyncall-1.0/android_x86_64_build/ && make)
 # (cd dyncall-1.0/android_x86_build/ && make)
 
-cp dyncall-1.0/android_arm64_build/dyncall/libdyncall_s.a \
-	dyncall-1.0/android_arm64_build/dyncallback/libdyncallback_s.a \
-	dyncall-1.0/android_arm64_build/dynload/libdynload_s.a \
+cp dyncall-1.0/ios_arm64_build/dyncall/libdyncall_s.a \
+	dyncall-1.0/ios_arm64_build/dyncallback/libdyncallback_s.a \
+	dyncall-1.0/ios_arm64_build/dynload/libdynload_s.a \
 	jni/arm64-v8a/
 	
-cp dyncall-1.0/android_arm_build/dyncall/libdyncall_s.a \
-	dyncall-1.0/android_arm_build/dyncallback/libdyncallback_s.a \
-	dyncall-1.0/android_arm_build/dynload/libdynload_s.a \
-	jni/armeabi-v7a/
-	
-cp dyncall-1.0/android_x86_64_build/dyncall/libdyncall_s.a \
-	dyncall-1.0/android_x86_64_build/dyncallback/libdyncallback_s.a \
-	dyncall-1.0/android_x86_64_build/dynload/libdynload_s.a \
-	jni/x86_64/
-	
-cp dyncall-1.0/android_x86_build/dyncall/libdyncall_s.a \
-	dyncall-1.0/android_x86_build/dyncallback/libdyncallback_s.a \
-	dyncall-1.0/android_x86_build/dynload/libdynload_s.a \
-	jni/x86/
-
 cd ..
-
-ME/lib
 
 ant -version
 
