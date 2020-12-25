@@ -95,6 +95,9 @@ This script is included in /build.xml and /config/update-dependencies.xml.
         <isset property="env.LWJGL_BUILD_OFFLINE"/>
     </condition>
 
+    <condition property="platform.ios">
+        <os name="iOS"/>
+    </condition>
     <condition property="platform.linux">
         <os name="Linux"/>
     </condition>
