@@ -20,6 +20,7 @@ cd ios_build
 # Build dyncall-1.0
 wget -nv -O dyncall-1.0.tar.gz "https://www.dyncall.org/r1.0/dyncall-1.0.tar.gz"
 tar xf dyncall-1.0.tar.gz
+chmod +x build_dyncall.bash
 ./build_dyncall.bash
 
 # FIXME make it better, ex put to function

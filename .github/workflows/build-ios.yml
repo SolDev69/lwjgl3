@@ -10,7 +10,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build with CI build script
-      run: ./ci_build_ios.bash
+      run: |
+        chmod +x ci_build_ios.bash
+        ./ci_build_ios.bash
 
     #- name: Upload modules release output
     #  uses: actions/upload-artifact@v1
