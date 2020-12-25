@@ -108,6 +108,7 @@ This script is included in /build.xml and /config/update-dependencies.xml.
         <os family="Windows"/>
     </condition>
 
+    <property name="platform" value="ios" if:set="platform.ios"/>
     <property name="platform" value="linux" if:set="platform.linux"/>
     <property name="platform" value="macos" if:set="platform.macos"/>
     <property name="platform" value="windows" if:set="platform.windows"/>
@@ -115,6 +116,7 @@ This script is included in /build.xml and /config/update-dependencies.xml.
     <property name="platform.remote" value="macosx" if:set="platform.macos"/>
     <property name="platform.remote" value="${platform}"/>
 
+    <property name="platform.ios.remote" value="ios"/>
     <property name="platform.linux.remote" value="linux"/>
     <property name="platform.macos.remote" value="macosx"/>
     <property name="platform.windows.remote" value="windows"/>
