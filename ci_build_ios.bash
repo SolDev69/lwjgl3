@@ -12,20 +12,10 @@ cd ios_build
 wget -nv -O dyncall-1.0.tar.gz "https://www.dyncall.org/r1.0/dyncall-1.0.tar.gz"
 tar xf dyncall-1.0.tar.gz
 chmod +x build_dyncall.bash
-./build_dyncall.bash
+##
+# FIXME IOS BUILD!!!
+# ./build_dyncall.bash
 
-# FIXME make it better, ex put to function
-# But it compile error!
-(cd dyncall-1.0 && make)
-# (cd dyncall-1.0/android_arm_build/ && make)
-# (cd dyncall-1.0/android_x86_64_build/ && make)
-# (cd dyncall-1.0/android_x86_build/ && make)
-
-cp dyncall-1.0/ios_arm64_build/dyncall/libdyncall_s.a \
-	dyncall-1.0/ios_arm64_build/dyncallback/libdyncallback_s.a \
-	dyncall-1.0/ios_arm64_build/dynload/libdynload_s.a \
-	jni/arm64-v8a/
-	
 cd ..
 
 ant -version
