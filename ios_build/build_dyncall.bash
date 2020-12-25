@@ -5,7 +5,7 @@ cd dyncall-1.0
 
 
 chmod +x configure
-bash configure --prefix=ios_arm64_build --target=iOS --sdk=11.0
+bash configure --prefix=ios_arm64_build --target=iOS
 
 # rm -rf ios_arm64_build
 # mkdir ios_arm64_build
