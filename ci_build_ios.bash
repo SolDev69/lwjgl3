@@ -23,7 +23,7 @@ ant -version
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 export LWJGL_BUILD_ARCH=arm64
-ant -Dplatform.ios=true -Dplatform.macos=false -Dbinding.bullet=false -Dbinding.driftfx=false  -Dbinding.glfw=false compile-templates compile compile-native release
+ant -Dplatform.ios=true -Dplatform.macos=false -Dbinding.bullet=false -Dbinding.driftfx=false  -Dbinding.glfw=false -Dbinding.rpmalloc=false compile-templates compile compile-native release
 
 # Copy debug libs
 cp -r obj/local libs_debug
