@@ -23,7 +23,7 @@ export LWJGL_BUILD_ARCH=arm64
 ant -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.bullet=false -Dbinding.driftfx=false \
   -Dbinding.glfw=false -Dbinding.opus=false \
-  -Dbinding.rpmalloc=false \
+  -Dbinding.rpmalloc=false -Dbinding.shaderc=false \
   compile-templates compile compile-native
 
 # Release
