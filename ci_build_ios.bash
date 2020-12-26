@@ -33,5 +33,5 @@ ant -Dplatform.ios=true -Dplatform.macos=false \
   compile-templates compile compile-native
 
 # Release
-cp -R bin/ios/arm64 ios_libs
+cp -R bin/libs/native/ios/arm64 ios_libs
 
