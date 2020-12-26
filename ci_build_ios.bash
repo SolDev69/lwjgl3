@@ -33,6 +33,5 @@ ant -Dplatform.ios=true -Dplatform.macos=false \
   compile-templates compile compile-native
 
 # Release
-mkdir ios_libs
-cp bin/libs/native/ios/arm64/org/lwjgl/*/*.dylib ios_libs
+cp bin/ios/arm64 ios_libs
 
