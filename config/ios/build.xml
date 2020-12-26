@@ -135,7 +135,7 @@
             <beforeLink unless:set="lib-uptodate"/>
             <apply executable="${clang}" failonerror="true" parallel="true" taskname="Linker" unless:set="lib-uptodate">
                 <srcfile/>
-                <arg line='-dynamiclib -Wl,-no_compact_unwind -miphoneos-version-min=${ios-version-min} -o ${lib.arch}/lib${name}.dylib -O3 -flto -fPIC'/>
+                <arg line='-dynamiclib -Wl,-no_compact_unwind -arch ${build.arch} -isysroot ${sdkroot} -miphoneos-version-min=${ios-version-min} -o ${lib.arch}/lib${name}.dylib -O3 -flto -fPIC'/>
                 <fileset dir="${dest}" includes="*.o"/>
                 <link/>
             </apply>
