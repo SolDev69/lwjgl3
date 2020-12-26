@@ -18,12 +18,17 @@ ant -version
 # Disable driftfx because some JDKs (eg OpenJDK on Ubuntu) don't come with JavaFX
 # Disable GLFW because we use our own GLFW dummy implementation.
 # Ignore ant build, since we are only building native code
+
+# TODO Re-enable jemalloc, OpenAL
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 export LWJGL_BUILD_ARCH=arm64
 ant -Dplatform.ios=true -Dplatform.macos=false \
+  -Dbinding.assimp=false -Dbinding.bgfx=false \
   -Dbinding.bullet=false -Dbinding.driftfx=false \
   -Dbinding.glfw=false -Dbinding.opus=false \
   -Dbinding.rpmalloc=false -Dbinding.shaderc=false \
+  -Dbinding.jemalloc=false -Dbinding.openal=false \
+  -Dbinding.openvr=false \
   compile-templates compile compile-native
 
 # Release
