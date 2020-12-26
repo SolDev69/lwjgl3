@@ -67,7 +67,7 @@
                 <arg value="-I${module.lwjgl.rel}/core/src/main/c"/>
                 <arg value="-I${module.lwjgl.rel}/core/src/main/c/${platform}"/>
                 <!-- MacOSX config headers are compatible with iOS -->
-                <arg value="-I${module.lwjgl.rel}/core/src/main/c/mac"/>
+                <arg value="-I${module.lwjgl.rel}/core/src/main/c/macos"/>
 
                 <arg value="-I${src.main.rel}" if:true="@{simple}"/>
 
