@@ -33,6 +33,7 @@
     <find-sdkroot version="13.7"/>
     <find-sdkroot version="12"/>
     <find-sdkroot version="11"/>
+    <!-- Fallback to default SDK -->
     <find-sdkroot version=""/>
     <fail unless="sdkroot" message="Failed to find the iOS SDK."/>
 
@@ -57,6 +58,7 @@
             <apply dir="@{dest}" executable="${clang}" dest="@{dest}" skipemptyfilesets="true" failonerror="true" parallel="true" taskname="Compiler">
                 <arg line="-c -std=c11 -ObjC" unless:set="cpp"/>
                 <arg line="-c -std=c++11" if:set="cpp"/>
+                <!-- MacOSX config headers are compatible with iOS, so use LWJGL_MACOS -->
                 <arg line="-O3 -flto -fPIC @{flags} -DNDEBUG -DLWJGL_MACOS -DLWJGL_${build.arch} -arch ${build.arch} -isysroot ${sdkroot} -miphoneos-version-min=${ios-version-min}"/>
 
                 <arg value="-I${jni.headers}"/>
@@ -64,6 +66,8 @@
 
                 <arg value="-I${module.lwjgl.rel}/core/src/main/c"/>
                 <arg value="-I${module.lwjgl.rel}/core/src/main/c/${platform}"/>
+                <!-- MacOSX config headers are compatible with iOS -->
+                <arg value="-I${module.lwjgl.rel}/core/src/main/c/mac"/>
 
                 <arg value="-I${src.main.rel}" if:true="@{simple}"/>
 
@@ -131,7 +135,7 @@
             <beforeLink unless:set="lib-uptodate"/>
             <apply executable="${clang}" failonerror="true" parallel="true" taskname="Linker" unless:set="lib-uptodate">
                 <srcfile/>
-                <arg line='-dynamiclib -Wl,-no_compact_unwind -mios-version-min=${ios-version-min} -o ${lib.arch}/lib${name}.dylib -O3 -flto -fPIC'/>
+                <arg line='-dynamiclib -Wl,-no_compact_unwind -miphoneos-version-min=${ios-version-min} -o ${lib.arch}/lib${name}.dylib -O3 -flto -fPIC'/>
                 <fileset dir="${dest}" includes="*.o"/>
                 <link/>
             </apply>
