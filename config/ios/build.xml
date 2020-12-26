@@ -32,12 +32,13 @@
     <find-sdkroot version="14.2"/>
     <find-sdkroot version="13.7"/>
     <find-sdkroot version="12"/>
-    <find-sdkroot version="11"/>
+    <find-sdkroot version="11.1"/>
     <!-- Fallback to default SDK -->
     <find-sdkroot version=""/>
     <fail unless="sdkroot" message="Failed to find the iOS SDK."/>
 
-    <property name="ios-version-min" value="11"/>
+    <!-- dyncall requires minimun iOS 11.1 so set LWJGL3 minimum too -->
+    <property name="ios-version-min" value="11.1"/>
 
     <property name="module.lwjgl.rel" value="../../../../${module.lwjgl}"/>
 
