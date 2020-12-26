@@ -12,7 +12,7 @@ cd ios_build
 wget -nv -O dyncall-1.0.tar.gz "https://www.dyncall.org/r1.0/dyncall-1.0.tar.gz"
 tar xf dyncall-1.0.tar.gz
 chmod +x build_dyncall.bash
-./build_dyncall.bash
+# ./build_dyncall.bash
 
 cd ..
 
