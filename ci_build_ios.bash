@@ -28,7 +28,7 @@ ant -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.glfw=false -Dbinding.opus=false \
   -Dbinding.rpmalloc=false -Dbinding.shaderc=false \
   -Dbinding.jemalloc=false -Dbinding.openal=false \
-  -Dbinding.openvr=false \
+  -Dbinding.nanovg=false -Dbinding.openvr=false \
   compile-templates compile compile-native
 
 # Release
