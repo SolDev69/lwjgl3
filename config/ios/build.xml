@@ -59,7 +59,7 @@
                 <arg line="-c -std=c11 -ObjC" unless:set="cpp"/>
                 <arg line="-c -std=c++11" if:set="cpp"/>
                 <!-- MacOSX config headers are compatible with iOS, so use LWJGL_MACOS -->
-                <arg line="-O3 -flto -fPIC @{flags} -DNDEBUG -DLWJGL_MACOS -DLWJGL_${build.arch} -arch ${build.arch} -isysroot ${sdkroot} -miphoneos-version-min=${ios-version-min} -Wunused-command-line-argument"/>
+                <arg line="-O3 -flto -fPIC @{flags} -DNDEBUG -DLWJGL_MACOS -DLWJGL_${build.arch} -arch ${build.arch} -isysroot ${sdkroot} -miphoneos-version-min=${ios-version-min}"/>
 
                 <arg value="-I${jni.headers}"/>
                 <arg value="-I${jni.headers}/darwin"/>
@@ -239,7 +239,8 @@
         </build>
 
         <!-- Meow -->
-        <build module="meow" simple="true" flags="-Werror -Wfatal-errors -maes" if:true="${binding.meow}"/>
+        <!-- -maes unused -->
+        <build module="meow" simple="true" flags="-Werror -Wfatal-errors" if:true="${binding.meow}"/>
 
         <!-- NanoVG -->
         <build module="nanovg" simple="true" if:true="${binding.nanovg}">

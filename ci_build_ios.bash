@@ -6,15 +6,15 @@ set -e
 # mv bsh-2.0b5.jar $ANT_HO
 # ls *
 
-cd ios_build
+mkdir dyncall
+cd dyncall
 
-# Build dyncall-1.0
-wget -nv -O dyncall-1.0.tar.gz "https://www.dyncall.org/r1.0/dyncall-1.0.tar.gz"
-tar xf dyncall-1.0.tar.gz
-chmod +x build_dyncall.bash
-# ./build_dyncall.bash
-
+# Get dyncall-1.0
+wget -nv -O dyncall.tar.gz "https://www.dyncall.org/r1.0/dyncall-1.0-iossdk-11.1-universal.tgz"
+tar xf dyncall.tar.gz
 cd ..
+mkdir -p bin/libs/native/ios/arm64/org/lwjgl
+mv dyncall/lib/* bin/libs/native/ios/arm64/org/lwjgl/
 
 ant -version
 
