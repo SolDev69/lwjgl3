@@ -170,6 +170,7 @@
                     <include name="${src.main}/*.c"/>
                     <include name="${src.generated}/*.c"/>
                     <include name="${src.generated}/${platform}/*.c"/>
+                    <include name="${src.generated}/macos/*.c"/>
                     <include name="${module.lwjgl}/jawt/src/generated/c/*.c" if:true="${binding.jawt}"/>
                 </fileset>
             </source>
