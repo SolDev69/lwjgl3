@@ -4,6 +4,7 @@
  * MACHINE GENERATED FILE, DO NOT EDIT
  */
 #include "common_tools.h"
+// #include <objc/objc-runtime.h>
 #include <objc/runtime.h>
 
 typedef struct objc_method_description (*protocol_getMethodDescriptionPROC) (intptr_t, intptr_t, jboolean, jboolean);
