@@ -22,7 +22,7 @@ ant -version
 # TODO Re-enable jemalloc, OpenAL
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 export LWJGL_BUILD_ARCH=arm64
-ant -Dplatform.ios=true -Dplatform.macos=false \
+ant -v -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.assimp=false -Dbinding.bgfx=false \
   -Dbinding.bullet=false -Dbinding.driftfx=false \
   -Dbinding.glfw=false -Dbinding.jemalloc=false \
