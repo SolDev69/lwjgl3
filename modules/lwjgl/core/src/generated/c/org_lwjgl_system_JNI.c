@@ -3,9 +3,7 @@
  * License terms: https://www.lwjgl.org/license
  * MACHINE GENERATED FILE, DO NOT EDIT
  */
-#include "common_tools.h"
-
-null_test_error_cmt_out_after_test
+#include "common_tools.h
 
 #ifdef LWJGL_WINDOWS
     #define APIENTRY __stdcall
