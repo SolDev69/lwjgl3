@@ -5,6 +5,8 @@
  */
 #include "common_tools.h"
 
+null_test_error_cmt_out_after_test
+
 #ifdef LWJGL_WINDOWS
     #define APIENTRY __stdcall
 #else
