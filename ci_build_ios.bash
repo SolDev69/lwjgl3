@@ -29,7 +29,7 @@ ant -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.nanovg=false -Dbinding.openal=false \
   -Dbinding.openvr=false -Dbinding.opus=false \
   -Dbinding.rpmalloc=false -Dbinding.shaderc=false \
-  -Dbinding.vma=false -Dbinding.vulkan=false \
+  -Dbinding.vma=true -Dbinding.vulkan=false \
   compile-templates compile compile-native
 
 # Release
