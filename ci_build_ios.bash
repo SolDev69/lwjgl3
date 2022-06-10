@@ -22,6 +22,7 @@ ant -version
 # TODO Re-enable jemalloc, OpenAL
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 export LWJGL_BUILD_ARCH=arm64
+# set to 3.3.0 to have arm64 binaries
 ant -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.assimp=false -Dbinding.bgfx=false \
   -Dbinding.bullet=false -Dbinding.driftfx=false \
@@ -30,6 +31,7 @@ ant -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.openvr=false -Dbinding.opus=false \
   -Dbinding.rpmalloc=false -Dbinding.shaderc=false \
   -Dbinding.vma=true -Dbinding.vulkan=true \
+  -Dbuild.type="release/3.3.0" \
   compile-templates compile compile-native
 
 # Release

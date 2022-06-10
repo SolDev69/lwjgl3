@@ -13,7 +13,9 @@ ant -version
 # Ignore ant build, since we are only building native code
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 
-ant -Dbinding.driftfx=false compile-templates compile release
+ant -Dbinding.driftfx=false \
+  -Dbuild.type="release/3.3.0" \
+  compile-templates compile release
 
 # ls *
 
