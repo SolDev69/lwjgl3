@@ -54,3 +54,18 @@ LOCAL_CFLAGS += -DLWJGL_LINUX -DJNI_VERSION_1_8=0x00010006 -include "stdio.h"
 
 include $(BUILD_SHARED_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_SHARED_LIBRARIES := lwjgl
+LOCAL_MODULE    := lwjgl_vma
+
+LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,\
+        $(wildcard $(LOCAL_PATH)/lwjgl/vma/src/generated/c/*.cpp) \
+        ) \
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/lwjgl/core/src/main/c \
+        $(LOCAL_PATH)/lwjgl/core/src/main/c/dyncall $(LOCAL_PATH)/lwjgl/core/src/main/c/linux \
+        $(LOCAL_PATH)/lwjgl/vma/src/main/c
+
+LOCAL_CFLAGS += -DLWJGL_LINUX
+
+include $(BUILD_SHARED_LIBRARY)
