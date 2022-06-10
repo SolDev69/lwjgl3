@@ -14,7 +14,7 @@ ant -version
  ANT_OPTS="-Dnashorn.args=\"--no-deprecation-warning\"" \
 
 ant -Dbinding.driftfx=false \
-  -Dbuild.type="release/3.3.0" \
+  -Dbuild.type="release/3.2.3" \
   compile-templates compile release
 
 # ls *
