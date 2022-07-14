@@ -9,6 +9,7 @@ import javax.annotation.*;
 
 import java.nio.*;
 
+import com.sun.istack.internal.*;
 import org.lwjgl.*;
 
 import org.lwjgl.system.*;
@@ -511,11 +512,12 @@ public class GL32C extends GL31C {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsBaseVertex">Reference Page</a>
      */
     public static void glMultiDrawElementsBaseVertex(@NativeType("GLenum") int mode, @NativeType("GLsizei const *") IntBuffer count, @NativeType("GLenum") int type, @NativeType("void const **") PointerBuffer indices, @NativeType("GLint *") IntBuffer basevertex) {
-        if (CHECKS) {
-            check(indices, count.remaining());
-            check(basevertex, count.remaining());
+
+        int i = 0;
+        while (basevertex.hasRemaining()){
+            GL32C.glDrawElementsBaseVertex(mode, count.get(i), type, indices.get(i), basevertex.get(i));
+            i++;
         }
-        nglMultiDrawElementsBaseVertex(mode, memAddress(count), type, memAddress(indices), count.remaining(), memAddress(basevertex));
     }
 
     // --- [ glProvokingVertex ] ---
