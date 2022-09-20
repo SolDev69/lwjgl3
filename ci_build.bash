@@ -2,7 +2,7 @@
 set -e
 
 # Grab Android NDK
-export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle"
+#export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk-bundle" - now it's in the CI .yml
 
 # wget http://beanshell.org/bsh-2.0b5.jar
 # mv bsh-2.0b5.jar $ANT_HOME/lib
