@@ -1,4 +1,4 @@
-LWJGL3 modified for Boardwalk and PojavLauncher.
+LWJGL3 modified for Boardwalk and PojavLauncher. 
 
 This fork enable support build for ARM32, ARM64 (aarch64), x86, x86_64 (amd64).
 
