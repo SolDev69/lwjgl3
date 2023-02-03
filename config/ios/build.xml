@@ -84,9 +84,8 @@
         <attribute name="module"/>
         <attribute name="linker" default="clang"/>
         <attribute name="lang" default="c"/>
-<!--
-        <attribute name="flags" default="-Werror -Wfatal-errors"/>
--->
+<!-- -Werror -Wfatal-errors -->
+        <attribute name="flags" default=""/>
         <attribute name="simple" default="false"/>
         <element name="beforeCompile" optional="true"/>
         <element name="source" optional="true"/>
