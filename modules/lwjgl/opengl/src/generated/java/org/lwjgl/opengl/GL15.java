@@ -9,8 +9,7 @@ import javax.annotation.*;
 
 import java.nio.*;
 
-import org.lwjgl.*;
-
+import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.*;
 
 import static org.lwjgl.system.Checks.*;
@@ -125,14 +124,6 @@ public class GL15 extends GL14 {
         );
     }
     
-// -- Begin LWJGL2 part --
-    public static ByteBuffer glGetBufferPointer(int target, int pname) {
-        int size = GL15.glGetBufferParameteri(target, GL15.GL_BUFFER_SIZE);
-        long res = GL15.glGetBufferPointer(target, pname);
-        return MemoryUtil.memByteBuffer(res, size);
-	}
-// -- End LWJGL2 part --
-
     // --- [ glBindBuffer ] ---
 
     /**

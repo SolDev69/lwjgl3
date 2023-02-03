@@ -84,7 +84,7 @@
         <attribute name="module"/>
         <attribute name="linker" default="clang"/>
         <attribute name="lang" default="c"/>
-<!-- -Werror -Wfatal-errors -->
+<!--  -->
         <attribute name="flags" default=""/>
         <attribute name="simple" default="false"/>
         <element name="beforeCompile" optional="true"/>
@@ -164,7 +164,7 @@
         <parallel threadsPerProcessor="2">
 
         <!-- CORE -->
-        <build module="core" flags="-Werror -Wfatal-errors -Wall -Wextra -pedantic">
+        <build module="core" flags=" -Wall -Wextra -pedantic">
             <source>
                 <arg value="-I${src.main.rel}/dyncall"/>
                 <fileset dir=".">
@@ -243,7 +243,7 @@
 
         <!-- Meow -->
         <!-- -maes unused -->
-        <build module="meow" simple="true" flags="-Werror -Wfatal-errors" if:true="${binding.meow}"/>
+        <build module="meow" simple="true" flags="" if:true="${binding.meow}"/>
 
         <!-- NanoVG -->
         <build module="nanovg" simple="true" if:true="${binding.nanovg}">

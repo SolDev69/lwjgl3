@@ -27,7 +27,7 @@ ant -Dplatform.ios=true -Dplatform.macos=false \
   -Dbinding.assimp=false -Dbinding.bgfx=false \
   -Dbinding.bullet=false -Dbinding.driftfx=false \
   -Dbinding.glfw=false -Dbinding.jemalloc=false \
-  -Dbinding.nanovg=false -Dbinding.openal=false \
+  -Dbinding.nanovg=false -Dbinding.openal=true \
   -Dbinding.openvr=false -Dbinding.opus=false \
   -Dbinding.rpmalloc=false -Dbinding.shaderc=false \
   -Dbinding.vma=true -Dbinding.vulkan=true \
