@@ -167,6 +167,7 @@ EXTERN_C_ENTER
 
 JNIEXPORT int JNICALL Java_org_lwjgl_system_SharedLibraryUtil_getLibraryPath(JNIEnv *env, jclass clazz, jlong pLibAddress, jlong sOutAddress, int bufSize)
 {
+  printf("LWJGL: Using dlinfo() code path\n");
   UNUSED_PARAMS(env, clazz)
   void *pLib = (void *)(uintptr_t)pLibAddress;
   char *sOut = (char *)(uintptr_t)sOutAddress;
@@ -296,6 +297,7 @@ EXTERN_C_ENTER
 
 JNIEXPORT int JNICALL Java_org_lwjgl_system_SharedLibraryUtil_getLibraryPath(JNIEnv *env, jclass clazz, jlong pLibAddress, jlong sOutAddress, jint bufSize)
 {
+  printf("LWJGL: Using phdr iterator code path\n");
   UNUSED_PARAMS(env, clazz)
   void *pLib = (void *)(uintptr_t)pLibAddress;
   char *sOut = (char *)(uintptr_t)sOutAddress;
@@ -328,6 +330,7 @@ EXTERN_C_ENTER
 
 JNIEXPORT int JNICALL Java_org_lwjgl_system_SharedLibraryUtil_getLibraryPath(JNIEnv *env, jclass clazz, jlong pLibAddress, jlong sOutAddress, jint bufSize)
 {
+ printf("LWJGL: Using suboptimal code path\n");
   UNUSED_PARAMS(env, clazz)
   void *pLib = (void *)(uintptr_t)pLibAddress;
   char *sOut = (char *)(uintptr_t)sOutAddress;
