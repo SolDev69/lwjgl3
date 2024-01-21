@@ -252,6 +252,7 @@ typedef struct {
 
 static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
 {
+  printf("LWJGL: iter_phdr_cb enter\n");
   UNUSED_PARAM(size);
   int l = -1;
   iter_phdr_data* d = (iter_phdr_data*)data;
@@ -259,6 +260,7 @@ static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
 
   /* get loaded object's handle if not requesting info about process itself */
   if(d->pLib != NULL) {
+    printf("LWJGL: pLib != null...\n");
     /* unable to relate info->dlpi_addr directly to our dlopen handle, let's
      * do what we do on macOS above, re-dlopen the already loaded lib (just
      * increases ref count) and compare handles */
@@ -271,19 +273,23 @@ static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
   /* compare handles and get name if found; if d->pLib == NULL this will
      enter info on first iterated object, which is the process itself */
   if(lib == (void*)d->pLib) {
+    printf("LWJGL: lib == d->pLib...\n");
     l = dl_strlen_strcpy(d->sOut, info->dlpi_name, d->bufSize);
 
     /* if dlpi_name is empty, lookup name via dladdr(proc_load_addr, ...) */
     if(l == 0 && d->pLib == NULL) {
+      printf("LWJGL: starting dladdr() name lookup...\n");
       /* dlpi_addr is the reloc base (0 if PIE), find real virtual load addr */
       void* vladdr = (void*)info->dlpi_addr;
       int i = 0;
+      printf("LWJGL: dlpi_phnum=%ld\n", (long)(info->dlpi_phnum));
       for(; i < info->dlpi_phnum; ++i) {
         if(info->dlpi_phdr[i].p_type == PT_LOAD) {
           vladdr = (void*)(info->dlpi_addr + info->dlpi_phdr[i].p_vaddr);
           break;
         }
       }
+      printf("LWJGL: Found! Exiting...\n");
       Dl_info di;
       if(dladdr(vladdr, &di) != 0)
         l = dl_strlen_strcpy(d->sOut, di.dli_fname, d->bufSize);
