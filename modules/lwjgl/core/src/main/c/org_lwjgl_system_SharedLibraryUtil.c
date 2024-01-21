@@ -265,6 +265,7 @@ static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
      * do what we do on macOS above, re-dlopen the already loaded lib (just
      * increases ref count) and compare handles */
     /* @@@ might be b/c it's the reloc addr... see below */
+    printf("LWJGL: re-opening library %s\n", info->dlpi_name);
     lib = dlopen(info->dlpi_name, RTLD_LIGHTEST);
     printf("LWJGL: lightest dlopen()=%p\n", lib);
     if(lib)
