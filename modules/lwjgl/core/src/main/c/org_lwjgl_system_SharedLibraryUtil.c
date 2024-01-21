@@ -258,6 +258,10 @@ static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
   iter_phdr_data* d = (iter_phdr_data*)data;
   void* lib = NULL;
 
+  // If the library name is null, we cannot even guess it's dlopen handle.
+  // So, skip it. Returning 0 makes the interator go on.
+  if(info->dlpi_name == NULL) return 0;
+   
   /* get loaded object's handle if not requesting info about process itself */
   if(d->pLib != NULL) {
     printf("LWJGL: pLib != null...\n");
