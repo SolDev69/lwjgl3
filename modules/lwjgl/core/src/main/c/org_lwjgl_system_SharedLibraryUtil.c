@@ -266,6 +266,7 @@ static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
      * increases ref count) and compare handles */
     /* @@@ might be b/c it's the reloc addr... see below */
     lib = dlopen(info->dlpi_name, RTLD_LIGHTEST);
+    printf("LWJGL: lightest dlopen()=%p\n", lib);
     if(lib)
       dlclose(lib);
   }
