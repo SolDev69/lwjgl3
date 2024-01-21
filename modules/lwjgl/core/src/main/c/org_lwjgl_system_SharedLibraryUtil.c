@@ -305,12 +305,72 @@ static int iter_phdr_cb(struct dl_phdr_info* info, size_t size, void* data)
   return l+1; /* strlen + '\0'; is 0 if lib not found, which continues iter */
 }
 
+#include <pthread.h>
+
+static char iterator_was_tested = 0;
+static char iterator_broken = 0;
+
+typedef struct {
+    pthread_cond_t wait_cond;
+    pthread_mutex_t wait_mutex;
+} iterator_test_data;
+
+static int test_callback(struct dl_phdr_info* info, size_t size, void* data) {
+  iterator_test_data* test_data = (iterator_test_data*) data;
+  pthread_mutex_lock(&test_data->wait_mutex);
+  void* handle = dlopen(NULL, RTLD_LAZY);
+  if(handle) dlclose(handle);
+  pthread_cond_signal(&test_data->wait_cond);
+  pthread_mutex_unlock(&test_data->wait_mutex);
+  // Return 1 here as we don't actually need to iterate anything, and just need to exit asap
+  return 1;
+}
+
+static void* test_thread(void* data) {
+    dl_iterate_phdr(test_callback, data);
+    return NULL;
+}
+
+static char test_for_broken_dl_iterator() {
+    if(iterator_was_tested) return iterator_broken;
+    struct timespec wait_time = {0, 200000000};
+    iterator_test_data test_data;
+    pthread_t test_thread_t;
+    if(pthread_cond_init(&test_data.wait_cond, NULL) != 0) {
+        printf("test_for_broken_dl_iterator: failed to create a pthread cond\n");
+        // Don't count the iterator as "tested" if an error occured during initialization.
+        return 1;
+    }
+    if(pthread_mutex_init(&test_data.wait_mutex, NULL) != 0) {
+        printf("test_for_broken_dl_iterator: failed to create a pthread mutex\n");
+        pthread_cond_destroy(&test_data.wait_cond);
+        return 1;
+    }
+    pthread_mutex_lock(&test_data.wait_mutex);
+    pthread_create(&test_thread_t, NULL, test_thread, &test_data);
+    int result = pthread_cond_timedwait(&test_data.wait_cond, &test_data.wait_mutex, &wait_time);
+    // Once pthred_cond_timedwait there are two possible results: the function has timed out (meaning the iterator is broken)
+    // or the iterator test went fine. Either way, the iterator was tested.
+    iterator_was_tested = 1;
+    if(result == ETIMEDOUT) {
+        printf("test_for_broken_dl_iterator: detected broken dl_iterate_phdr\n");
+        iterator_broken = 1;
+    } else {
+        pthread_cond_destroy(&test_data.wait_cond);
+        pthread_mutex_destroy(&test_data.wait_mutex);
+        iterator_broken = 0;
+    }
+    return iterator_broken;
+}
+
 EXTERN_C_ENTER
 
 JNIEXPORT int JNICALL Java_org_lwjgl_system_SharedLibraryUtil_getLibraryPath(JNIEnv *env, jclass clazz, jlong pLibAddress, jlong sOutAddress, jint bufSize)
 {
-  printf("LWJGL: Using phdr iterator code path\n");
   UNUSED_PARAMS(env, clazz)
+  // If the dl_iterate_phdr is broken (which means that dlopen hangs when called in the iterator callback)
+  // return 0 here immediately, to not let LWJGL's iterator hang the rest of the thread.
+  if(test_for_broken_dl_iterator()) return 0;
   void *pLib = (void *)(uintptr_t)pLibAddress;
   char *sOut = (char *)(uintptr_t)sOutAddress;
 
